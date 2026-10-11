@@ -132,6 +132,13 @@ body {
   -webkit-user-select: none;
 }
 
+.no-select input,
+.no-select textarea,
+.no-select [contenteditable="true"] {
+  user-select: text;
+  -webkit-user-select: text;
+}
+
 @keyframes shimmer {
   0% {
     background-position: -200% 0;

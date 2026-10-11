@@ -5,6 +5,7 @@ import { InstallPrompt } from "@/components/pwa/InstallPrompt";
 import { Badge } from "@/components/ui/Badge";
 import { WhatsAppIcon } from "@/components/icons/WhatsAppIcon";
 import { TelegramIcon } from "@/components/icons/TelegramIcon";
+import { formatLastUpdated } from "@/lib/utils/buildInfo";
 
 const footerLinks = [
   { href: "/", label: "Home" },
@@ -105,7 +106,15 @@ export async function Footer() {
         <div className="mt-8 flex flex-col items-center justify-between gap-3 border-t border-border-subtle pt-6 text-xs text-foreground/50 sm:flex-row">
           <span>&copy; {year} Course and Notes Purchasing App. All rights reserved.</span>
           <VisitorCounterTicker />
-          <span>Made for serious exam aspirants.</span>
+          <span>Last updated: {formatLastUpdated()}</span>
+        </div>
+
+        <div className="mt-3 flex flex-col items-center gap-1 text-center text-[11px] text-foreground/40 sm:flex-row sm:justify-center sm:gap-2">
+          <span>
+            All content, course material and PDFs on this site are proprietary and protected
+            under copyright law. Unauthorized reproduction, redistribution or resale is
+            prohibited.
+          </span>
         </div>
       </div>
     </footer>

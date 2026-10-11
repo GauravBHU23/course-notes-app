@@ -7,6 +7,7 @@ import { BundleCard } from "@/components/marketing/BundleCard";
 import { Button } from "@/components/ui/Button";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
+import { ContentProtection } from "@/components/layout/ContentProtection";
 import type { ExamCategory, BundlePublic } from "@/types/domain";
 
 export const metadata: Metadata = {
@@ -48,6 +49,7 @@ export default async function Home() {
 
   return (
     <div className="flex min-h-screen flex-col">
+      <ContentProtection />
       <Header />
       <main className="flex-1">
         <AnimatedHero />
