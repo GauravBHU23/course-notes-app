@@ -96,6 +96,24 @@ export interface ActiveSession {
   revoked_reason: SessionRevokedReason | null;
 }
 
+export interface Banner {
+  id: string;
+  title: string | null;
+  image_url: string | null;
+  link_url: string | null;
+  display_order: number;
+  is_active: boolean;
+  starts_at: string | null;
+  ends_at: string | null;
+  created_at: string;
+}
+
+export interface SettingRow {
+  key: string;
+  value: string | null;
+  updated_at: string;
+}
+
 export interface PdfAccessTokenPayload {
   uid: string;
   pid: string;

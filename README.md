@@ -1,36 +1,48 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# ExamPrep Store
 
-## Getting Started
+Platform for selling access to exam-prep PDFs/notes (SSC, Railway, Bank, UGC NET, BPSC, TRE, etc.) with view-only watermarked PDF access, single-active-session login, OTP/password auth, and Cashfree payments.
 
-First, run the development server:
+Stack: Next.js (App Router) + TypeScript + Tailwind, Supabase (Postgres/Auth/Storage/Realtime), Cashfree payments.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## Setup
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+1. Install dependencies:
+   ```bash
+   npm install
+   ```
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+2. Copy the env template and fill in real values:
+   ```bash
+   cp .env.local.example .env.local
+   ```
+   You'll need:
+   - **Supabase**: project URL, anon key, service-role key (from your Supabase project settings).
+   - **Cashfree**: App ID, Secret Key, Webhook Secret (from your Cashfree merchant dashboard). Set `CASHFREE_ENV`/`NEXT_PUBLIC_CASHFREE_ENV` to `sandbox` until you're ready to go live.
+   - **Resend**: API key for transactional emails (OTP codes, invoices, welcome emails).
+   - `OTP_SECRET` and `PDF_TOKEN_SECRET`: generate with `openssl rand -hex 32`. Keep these distinct from each other and from Supabase/Cashfree keys.
+   - `SMS_PROVIDER` / `SMS_PROVIDER_API_KEY`: optional. Leave blank to keep mobile OTP login disabled with a "coming soon" message; email OTP and password login both work without this.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+3. Apply the database schema to your Supabase project:
+   ```bash
+   npx supabase link --project-ref <your-project-ref>
+   npx supabase db push
+   ```
+   This runs every file in `supabase/migrations/` in order (tables, RLS policies, views, storage buckets, realtime authorization). Optionally seed sample data for local testing: `npx supabase db reset` applies `supabase/seed.sql` too.
 
-## Learn More
+4. In the Supabase dashboard, configure the Cashfree webhook URL (`<your-domain>/api/payments/cashfree/webhook`) in your Cashfree merchant dashboard's webhook settings, matching the `CASHFREE_WEBHOOK_SECRET` in your env.
 
-To learn more about Next.js, take a look at the following resources:
+5. Run the dev server:
+   ```bash
+   npm run dev
+   ```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Architecture notes
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- **Single active session**: enforced via `profiles.session_version` + `active_sessions`, checked on every request in `src/proxy.ts` (Next.js 16's renamed middleware convention) and pushed instantly to open tabs via Supabase Realtime Broadcast (`src/components/realtime/SessionGuard.tsx`). See `src/lib/auth/session.ts`.
+- **PDF security**: PDFs live in a private Supabase Storage bucket, never exposed via a public/permanent URL. Viewing requires a short-lived, single-use, HMAC-signed token (`src/lib/pdf/signToken.ts`) bound to the current session, streamed as `application/octet-stream` and rendered client-side via PDF.js onto a `<canvas>` with a baked-in per-user watermark (`src/components/pdf-viewer/`). This deters redistribution but cannot block PrintScreen or a camera photographing the screen — no web page can.
+- **Payments**: Cashfree order creation re-reads the canonical price server-side; the only thing that ever marks a purchase successful is a signature-verified webhook call (`src/app/api/payments/cashfree/webhook/route.ts`), never the client-side checkout redirect.
+- **Admin vs. student auth**: separate cookies (`admin_session` / `app_session`) and separate login routes, sharing the same underlying session/lockout/OTP primitives.
 
-## Deploy on Vercel
+## Mobile app (later phase)
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+A React Native + Expo app will reuse this same Supabase backend (same tables, RLS, Storage buckets, and PDF token scheme) for Android (and later iOS) distribution. Not part of this repository yet.

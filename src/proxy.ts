@@ -6,7 +6,7 @@ const STUDENT_PROTECTED_PREFIX = "/dashboard";
 const ADMIN_PROTECTED_PREFIX = "/admin";
 const ADMIN_LOGIN_PATH = "/admin/login";
 
-export async function middleware(req: NextRequest) {
+export async function proxy(req: NextRequest) {
   const { pathname } = req.nextUrl;
 
   if (pathname.startsWith(ADMIN_PROTECTED_PREFIX) && pathname !== ADMIN_LOGIN_PATH) {
