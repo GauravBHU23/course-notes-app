@@ -33,9 +33,18 @@ export function AnimatedHero() {
       />
 
       <div className="mx-auto max-w-5xl px-4 py-20 text-center sm:px-6 sm:py-28">
+        {/*
+          Text content below renders at full opacity by default (no
+          initial={{opacity:0}}) and only animates a timing/y-offset
+          flourish on top. Hiding real content behind a JS-driven "animate
+          in" with an opacity-0 initial state made the hero invisible until
+          Framer Motion hydrated -- a real regression on slow connections,
+          low-end phones, or if JS was briefly delayed. Content must never
+          depend on client JS to become visible.
+        */}
         <motion.span
-          initial={{ opacity: 0, y: -10 }}
-          animate={{ opacity: 1, y: 0 }}
+          initial={{ y: -10 }}
+          animate={{ y: 0 }}
           transition={{ duration: 0.5 }}
           className="inline-flex items-center rounded-full bg-brand-50 px-4 py-1.5 text-sm font-medium text-brand-700"
         >
@@ -43,8 +52,8 @@ export function AnimatedHero() {
         </motion.span>
 
         <motion.h1
-          initial={{ opacity: 0, y: 16 }}
-          animate={{ opacity: 1, y: 0 }}
+          initial={{ y: 16 }}
+          animate={{ y: 0 }}
           transition={{ duration: 0.6, delay: 0.1 }}
           className="mt-6 text-4xl font-bold tracking-tight text-foreground sm:text-5xl md:text-6xl"
         >
@@ -55,8 +64,8 @@ export function AnimatedHero() {
         </motion.h1>
 
         <motion.p
-          initial={{ opacity: 0, y: 16 }}
-          animate={{ opacity: 1, y: 0 }}
+          initial={{ y: 16 }}
+          animate={{ y: 0 }}
           transition={{ duration: 0.6, delay: 0.2 }}
           className="mx-auto mt-6 max-w-2xl text-lg text-foreground/70"
         >
@@ -65,8 +74,8 @@ export function AnimatedHero() {
         </motion.p>
 
         <motion.div
-          initial={{ opacity: 0, y: 16 }}
-          animate={{ opacity: 1, y: 0 }}
+          initial={{ y: 16 }}
+          animate={{ y: 0 }}
           transition={{ duration: 0.6, delay: 0.3 }}
           className="mt-10 flex flex-col items-center justify-center gap-3 sm:flex-row"
         >
