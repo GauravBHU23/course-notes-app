@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 import { Card } from "@/components/ui/Card";
 import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
@@ -22,7 +23,15 @@ export function UserDetail({ profile, purchases, sessions }: UserDetailProps) {
   async function handleLockToggle() {
     setLoading("lock");
     try {
-      await fetch(`/api/admin/users/${profile.id}/${isLocked ? "unlock" : "lock"}`, { method: "POST" });
+      const res = await fetch(`/api/admin/users/${profile.id}/${isLocked ? "unlock" : "lock"}`, {
+        method: "POST",
+      });
+      if (!res.ok) {
+        const data = await res.json().catch(() => ({}));
+        toast.error(data.error ?? (isLocked ? "Could not unlock account." : "Could not lock account."));
+        return;
+      }
+      toast.success(isLocked ? "Account unlocked." : "Account locked.");
       router.refresh();
     } finally {
       setLoading(null);
@@ -32,7 +41,13 @@ export function UserDetail({ profile, purchases, sessions }: UserDetailProps) {
   async function handleRevokeSession(sessionId: string) {
     setLoading(sessionId);
     try {
-      await fetch(`/api/admin/sessions/${sessionId}/revoke`, { method: "POST" });
+      const res = await fetch(`/api/admin/sessions/${sessionId}/revoke`, { method: "POST" });
+      if (!res.ok) {
+        const data = await res.json().catch(() => ({}));
+        toast.error(data.error ?? "Could not revoke session.");
+        return;
+      }
+      toast.success("Session revoked.");
       router.refresh();
     } finally {
       setLoading(null);
@@ -42,7 +57,13 @@ export function UserDetail({ profile, purchases, sessions }: UserDetailProps) {
   async function handleRevokeAll() {
     setLoading("revoke-all");
     try {
-      await fetch(`/api/admin/users/${profile.id}/revoke-all-sessions`, { method: "POST" });
+      const res = await fetch(`/api/admin/users/${profile.id}/revoke-all-sessions`, { method: "POST" });
+      if (!res.ok) {
+        const data = await res.json().catch(() => ({}));
+        toast.error(data.error ?? "Could not force logout.");
+        return;
+      }
+      toast.success("All sessions revoked.");
       router.refresh();
     } finally {
       setLoading(null);

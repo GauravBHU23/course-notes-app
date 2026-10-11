@@ -47,9 +47,19 @@ export async function sendOtp(
   });
 
   if (channel === "email") {
-    await sendOtpEmail(identifier, code);
+    const delivered = await sendOtpEmail(identifier, code);
+    if (!delivered) {
+      return {
+        ok: false,
+        message: "Could not send the OTP email right now. Please try again in a moment, or use password login.",
+      };
+    }
   } else {
-    await smsProvider.send(identifier, `Your OTP is ${code}. Valid for 5 minutes. Do not share it.`);
+    try {
+      await smsProvider.send(identifier, `Your OTP is ${code}. Valid for 5 minutes. Do not share it.`);
+    } catch {
+      return { ok: false, message: "Could not send the OTP SMS right now. Please try again in a moment." };
+    }
   }
 
   return { ok: true, message: `OTP sent via ${channel}.` };

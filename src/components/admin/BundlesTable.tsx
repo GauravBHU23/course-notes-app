@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 import { Card } from "@/components/ui/Card";
 import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
@@ -15,11 +16,17 @@ export function BundlesTable({ bundles }: { bundles: BundleRow[] }) {
   const router = useRouter();
 
   async function toggleActive(bundle: BundleRow) {
-    await fetch(`/api/admin/bundles/${bundle.id}`, {
+    const res = await fetch(`/api/admin/bundles/${bundle.id}`, {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ is_active: !bundle.is_active }),
     });
+    if (!res.ok) {
+      const data = await res.json().catch(() => ({}));
+      toast.error(data.error ?? "Could not update bundle.");
+      return;
+    }
+    toast.success(bundle.is_active ? "Bundle deactivated." : "Bundle activated.");
     router.refresh();
   }
 
@@ -28,9 +35,12 @@ export function BundlesTable({ bundles }: { bundles: BundleRow[] }) {
     const res = await fetch(`/api/admin/bundles/${id}`, { method: "DELETE" });
     const data = await res.json().catch(() => ({}));
     if (!res.ok) {
-      alert(data.error ?? "Could not delete bundle.");
+      const message = data.error ?? "Could not delete bundle.";
+      alert(message);
+      toast.error(message);
       return;
     }
+    toast.success("Bundle deleted.");
     router.refresh();
   }
 

@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 import { Card } from "@/components/ui/Card";
 import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
@@ -14,7 +15,13 @@ export function LockedAccountsTable({ profiles }: { profiles: Profile[] }) {
   async function handleUnlock(id: string) {
     setLoading(id);
     try {
-      await fetch(`/api/admin/users/${id}/unlock`, { method: "POST" });
+      const res = await fetch(`/api/admin/users/${id}/unlock`, { method: "POST" });
+      if (!res.ok) {
+        const data = await res.json().catch(() => ({}));
+        toast.error(data.error ?? "Could not unlock account.");
+        return;
+      }
+      toast.success("Account unlocked.");
       router.refresh();
     } finally {
       setLoading(null);

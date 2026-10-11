@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 import { Card } from "@/components/ui/Card";
 import { Input } from "@/components/ui/Input";
 import { Button } from "@/components/ui/Button";
@@ -48,9 +49,12 @@ export function BundleForm({ categories, bundle }: BundleFormProps) {
       });
       const data = await res.json();
       if (!res.ok) {
-        setError(data.error ?? "Something went wrong.");
+        const message = data.error ?? "Something went wrong.";
+        setError(message);
+        toast.error(message);
         return;
       }
+      toast.success(bundle ? "Bundle updated." : "Bundle created.");
       router.push("/admin/bundles");
       router.refresh();
     } finally {

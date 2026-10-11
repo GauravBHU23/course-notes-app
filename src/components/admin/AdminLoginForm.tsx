@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 import { Card } from "@/components/ui/Card";
 import { Input } from "@/components/ui/Input";
 import { Button } from "@/components/ui/Button";
@@ -36,12 +37,15 @@ export function AdminLoginForm() {
       const data = await res.json();
       if (!res.ok) {
         if (res.status === 423) setLockSeconds(data.remainingSeconds ?? 300);
-        setError(data.error ?? "Login failed.");
+        const message = data.error ?? "Login failed.";
+        setError(message);
+        toast.error(message);
         return;
       }
       setMaskedEmail(data.maskedEmail);
       setVerifiedIdentifier(data.identifier);
       setStep("otp");
+      toast.success("OTP sent! Check your email.");
     } finally {
       setLoading(false);
     }
@@ -59,9 +63,12 @@ export function AdminLoginForm() {
       });
       const data = await res.json();
       if (!res.ok) {
-        setError(data.error ?? "Invalid OTP.");
+        const message = data.error ?? "Invalid OTP.";
+        setError(message);
+        toast.error(message);
         return;
       }
+      toast.success("Logged in successfully!");
       router.push("/admin");
       router.refresh();
     } finally {
@@ -80,10 +87,13 @@ export function AdminLoginForm() {
       });
       const data = await res.json();
       if (!res.ok) {
-        setError(data.error ?? "Could not resend OTP.");
+        const message = data.error ?? "Could not resend OTP.";
+        setError(message);
+        toast.error(message);
         return;
       }
       setOtp("");
+      toast.success("OTP sent! Check your email.");
     } finally {
       setLoading(false);
     }

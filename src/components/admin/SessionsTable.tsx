@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 import { Card } from "@/components/ui/Card";
 import { Button } from "@/components/ui/Button";
 
@@ -22,7 +23,13 @@ export function SessionsTable({ sessions }: { sessions: SessionRow[] }) {
   async function handleRevoke(id: string) {
     setLoading(id);
     try {
-      await fetch(`/api/admin/sessions/${id}/revoke`, { method: "POST" });
+      const res = await fetch(`/api/admin/sessions/${id}/revoke`, { method: "POST" });
+      if (!res.ok) {
+        const data = await res.json().catch(() => ({}));
+        toast.error(data.error ?? "Could not revoke session.");
+        return;
+      }
+      toast.success("Session revoked.");
       router.refresh();
     } finally {
       setLoading(null);

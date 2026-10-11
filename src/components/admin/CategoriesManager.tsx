@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 import { Card } from "@/components/ui/Card";
 import { Input } from "@/components/ui/Input";
 import { Button } from "@/components/ui/Button";
@@ -72,9 +73,12 @@ export function CategoriesManager({ categories }: { categories: ExamCategory[] }
       });
       const data = await res.json();
       if (!res.ok) {
-        setError(data.error ?? "Something went wrong.");
+        const message = data.error ?? "Something went wrong.";
+        setError(message);
+        toast.error(message);
         return;
       }
+      toast.success(form.id ? "Category updated." : "Category created.");
       resetForm();
       router.refresh();
     } finally {
@@ -87,18 +91,27 @@ export function CategoriesManager({ categories }: { categories: ExamCategory[] }
     const res = await fetch(`/api/admin/categories/${id}`, { method: "DELETE" });
     const data = await res.json().catch(() => ({}));
     if (!res.ok) {
-      alert(data.error ?? "Could not delete category.");
+      const message = data.error ?? "Could not delete category.";
+      alert(message);
+      toast.error(message);
       return;
     }
+    toast.success("Category deleted.");
     router.refresh();
   }
 
   async function toggleActive(category: ExamCategory) {
-    await fetch(`/api/admin/categories/${category.id}`, {
+    const res = await fetch(`/api/admin/categories/${category.id}`, {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ is_active: !category.is_active }),
     });
+    if (!res.ok) {
+      const data = await res.json().catch(() => ({}));
+      toast.error(data.error ?? "Could not update category.");
+      return;
+    }
+    toast.success(category.is_active ? "Category deactivated." : "Category activated.");
     router.refresh();
   }
 

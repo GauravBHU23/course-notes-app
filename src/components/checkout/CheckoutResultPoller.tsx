@@ -9,7 +9,7 @@ interface CheckoutResultPollerProps {
   orderId: string | null;
 }
 
-type PollStatus = "pending" | "success" | "failed";
+type PollStatus = "pending" | "success" | "failed" | "session_expired";
 
 const MAX_POLLS = 20;
 const POLL_INTERVAL_MS = 2000;
@@ -31,6 +31,18 @@ export function CheckoutResultPoller({ orderId }: CheckoutResultPollerProps) {
       attemptsRef.current += 1;
       try {
         const res = await fetch(`/api/payments/cashfree/verify?orderId=${encodeURIComponent(orderId!)}`);
+
+        // A 401 here specifically means the session expired or was logged
+        // out elsewhere mid-checkout -- distinct from "still pending",
+        // since the payment itself may well have succeeded server-side
+        // (the webhook doesn't depend on this browser's session at all).
+        // Telling the user "failed" in that case would be actively
+        // misleading about money that may have already gone through.
+        if (res.status === 401) {
+          if (!cancelled) setStatus("session_expired");
+          return;
+        }
+
         const data = await res.json();
         if (cancelled) return;
 
@@ -84,6 +96,18 @@ export function CheckoutResultPoller({ orderId }: CheckoutResultPollerProps) {
       )}
       {status === "pending" && (
         <p className="text-sm text-foreground/60">This usually takes just a few seconds…</p>
+      )}
+      {status === "session_expired" && (
+        <>
+          <p className="text-sm text-foreground/60">
+            Your session ended before we could confirm this payment in your browser. If money was
+            deducted, your access will still be granted automatically once the payment is
+            confirmed on our end — please log in again and check My Bundles or Purchases.
+          </p>
+          <Link href="/login">
+            <Button className="mt-2">Log in again</Button>
+          </Link>
+        </>
       )}
     </PaymentStatus>
   );

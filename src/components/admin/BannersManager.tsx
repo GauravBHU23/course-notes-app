@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 import { Card } from "@/components/ui/Card";
 import { Input } from "@/components/ui/Input";
 import { Button } from "@/components/ui/Button";
@@ -69,10 +70,13 @@ export function BannersManager({ banners }: { banners: Banner[] }) {
       const res = await fetch("/api/admin/banners/upload-image", { method: "POST", body: formData });
       const data = await res.json();
       if (!res.ok) {
-        setError(data.error ?? "Image upload failed.");
+        const message = data.error ?? "Image upload failed.";
+        setError(message);
+        toast.error(message);
         return;
       }
       setForm((f) => ({ ...f, image_url: data.url }));
+      toast.success("Image uploaded.");
     } finally {
       setUploading(false);
     }
@@ -100,9 +104,12 @@ export function BannersManager({ banners }: { banners: Banner[] }) {
       });
       const data = await res.json();
       if (!res.ok) {
-        setError(data.error ?? "Something went wrong.");
+        const message = data.error ?? "Something went wrong.";
+        setError(message);
+        toast.error(message);
         return;
       }
+      toast.success(form.id ? "Banner updated." : "Banner created.");
       resetForm();
       router.refresh();
     } finally {
@@ -112,16 +119,28 @@ export function BannersManager({ banners }: { banners: Banner[] }) {
 
   async function handleDelete(id: string) {
     if (!confirm("Delete this banner?")) return;
-    await fetch(`/api/admin/banners/${id}`, { method: "DELETE" });
+    const res = await fetch(`/api/admin/banners/${id}`, { method: "DELETE" });
+    if (!res.ok) {
+      const data = await res.json().catch(() => ({}));
+      toast.error(data.error ?? "Could not delete banner.");
+      return;
+    }
+    toast.success("Banner deleted.");
     router.refresh();
   }
 
   async function toggleActive(banner: Banner) {
-    await fetch(`/api/admin/banners/${banner.id}`, {
+    const res = await fetch(`/api/admin/banners/${banner.id}`, {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ is_active: !banner.is_active }),
     });
+    if (!res.ok) {
+      const data = await res.json().catch(() => ({}));
+      toast.error(data.error ?? "Could not update banner.");
+      return;
+    }
+    toast.success(banner.is_active ? "Banner deactivated." : "Banner activated.");
     router.refresh();
   }
 

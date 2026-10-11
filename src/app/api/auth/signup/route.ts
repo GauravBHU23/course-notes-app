@@ -35,8 +35,14 @@ export async function POST(req: NextRequest) {
   });
 
   if (error || !created?.user) {
-    const message = error?.message?.includes("already registered")
-      ? "This email is already registered."
+    // Match on Supabase's stable error code rather than its message text --
+    // the message is "A user with this email address has already been
+    // registered", which doesn't contain the exact substring "already
+    // registered" the earlier check looked for, so real duplicate-email
+    // signups were silently falling through to the generic error.
+    const isDuplicate = error?.code === "email_exists" || error?.status === 422;
+    const message = isDuplicate
+      ? "This email is already registered. Try logging in instead."
       : "Could not create account. Please try again.";
     return NextResponse.json({ error: message }, { status: 409 });
   }

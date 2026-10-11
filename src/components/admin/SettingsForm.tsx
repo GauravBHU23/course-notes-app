@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 import { Card } from "@/components/ui/Card";
 import { Input } from "@/components/ui/Input";
 import { Button } from "@/components/ui/Button";
@@ -43,10 +44,13 @@ export function SettingsForm({ initial }: { initial: SettingsValues }) {
       });
       const data = await res.json();
       if (!res.ok) {
-        setError(data.error ?? "Could not save settings.");
+        const message = data.error ?? "Could not save settings.";
+        setError(message);
+        toast.error(message);
         return;
       }
       setSaved(true);
+      toast.success("Settings saved.");
       router.refresh();
     } finally {
       setLoading(false);

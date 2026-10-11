@@ -2,7 +2,7 @@
 
 import { motion, AnimatePresence } from "framer-motion";
 
-type Status = "pending" | "success" | "failed";
+type Status = "pending" | "success" | "failed" | "session_expired";
 
 interface PaymentStatusProps {
   status: Status;
@@ -13,18 +13,21 @@ const icons: Record<Status, string> = {
   pending: "⏳",
   success: "✅",
   failed: "❌",
+  session_expired: "🔒",
 };
 
 const titles: Record<Status, string> = {
   pending: "Confirming your payment…",
   success: "Payment successful!",
   failed: "Payment failed",
+  session_expired: "You were signed out",
 };
 
 const colors: Record<Status, string> = {
   pending: "bg-tone-warning-bg text-tone-warning-text",
   success: "bg-tone-success-bg text-tone-success-text",
   failed: "bg-tone-danger-bg text-tone-danger-text",
+  session_expired: "bg-tone-warning-bg text-tone-warning-text",
 };
 
 export function PaymentStatus({ status, children }: PaymentStatusProps) {

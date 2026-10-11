@@ -2,6 +2,7 @@
 
 import { useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 import { Card } from "@/components/ui/Card";
 import { Input } from "@/components/ui/Input";
 import { Button } from "@/components/ui/Button";
@@ -44,9 +45,12 @@ export function PdfsManager({ bundles, pdfsByBundle }: PdfsManagerProps) {
       const res = await fetch("/api/admin/pdfs/upload", { method: "POST", body: formData });
       const data = await res.json();
       if (!res.ok) {
-        setError(data.error ?? "Upload failed.");
+        const message = data.error ?? "Upload failed.";
+        setError(message);
+        toast.error(message);
         return;
       }
+      toast.success("PDF uploaded.");
       setTitle("");
       setFile(null);
       router.refresh();
@@ -56,11 +60,17 @@ export function PdfsManager({ bundles, pdfsByBundle }: PdfsManagerProps) {
   }
 
   async function toggleActive(pdf: AdminPdfRow) {
-    await fetch(`/api/admin/pdfs/${pdf.id}`, {
+    const res = await fetch(`/api/admin/pdfs/${pdf.id}`, {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ is_active: !pdf.is_active }),
     });
+    if (!res.ok) {
+      const data = await res.json().catch(() => ({}));
+      toast.error(data.error ?? "Could not update PDF.");
+      return;
+    }
+    toast.success(pdf.is_active ? "PDF soft-deleted." : "PDF restored.");
     router.refresh();
   }
 
@@ -70,7 +80,7 @@ export function PdfsManager({ bundles, pdfsByBundle }: PdfsManagerProps) {
     const swapWith = sorted[index + direction];
     if (!swapWith) return;
 
-    await fetch("/api/admin/pdfs/reorder", {
+    const res = await fetch("/api/admin/pdfs/reorder", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -80,6 +90,11 @@ export function PdfsManager({ bundles, pdfsByBundle }: PdfsManagerProps) {
         ],
       }),
     });
+    if (!res.ok) {
+      const data = await res.json().catch(() => ({}));
+      toast.error(data.error ?? "Could not reorder PDFs.");
+      return;
+    }
     router.refresh();
   }
 

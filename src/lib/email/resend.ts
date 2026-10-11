@@ -27,29 +27,34 @@ function transporter() {
 
 const FROM = process.env.SMTP_FROM_EMAIL || process.env.SMTP_USER || "notifications@example.com";
 
-export async function sendOtpEmail(to: string, code: string) {
+/**
+ * All send* functions below return a boolean rather than throwing. A down
+ * SMTP server, a hit Gmail daily-send limit, or a transient network error
+ * must never crash the caller (login OTP, signup, payment webhook) --
+ * callers that need to tell the end user "email delivery failed" check the
+ * return value explicitly; everyone else can fire-and-forget.
+ */
+async function send(mail: Parameters<ReturnType<typeof nodemailer.createTransport>["sendMail"]>[0]): Promise<boolean> {
   const mailer = transporter();
   if (!mailer) {
-    console.warn(`[email] SMTP not configured; OTP for ${to} is ${code}`);
-    return;
+    console.warn(`[email] SMTP not configured; email to ${String(mail.to)} not sent (subject: ${String(mail.subject)})`);
+    return false;
   }
-  await mailer.sendMail({
-    from: FROM,
-    to,
-    subject: "Your login OTP",
-    html: otpEmailHtml(code),
-  });
+  try {
+    await mailer.sendMail(mail);
+    return true;
+  } catch (err) {
+    console.error(`[email] send failed for ${String(mail.to)} (subject: ${String(mail.subject)}):`, err);
+    return false;
+  }
 }
 
-export async function sendWelcomeEmail(to: string, fullName: string) {
-  const mailer = transporter();
-  if (!mailer) return;
-  await mailer.sendMail({
-    from: FROM,
-    to,
-    subject: "Welcome! Your account is ready",
-    html: welcomeEmailHtml(fullName),
-  });
+export async function sendOtpEmail(to: string, code: string): Promise<boolean> {
+  return send({ from: FROM, to, subject: "Your login OTP", html: otpEmailHtml(code) });
+}
+
+export async function sendWelcomeEmail(to: string, fullName: string): Promise<boolean> {
+  return send({ from: FROM, to, subject: "Welcome! Your account is ready", html: welcomeEmailHtml(fullName) });
 }
 
 export async function sendInvoiceEmail(params: {
@@ -60,33 +65,16 @@ export async function sendInvoiceEmail(params: {
   invoiceNumber: string;
   accessExpiresAt: string;
   invoicePdfBuffer: Buffer;
-}) {
-  const mailer = transporter();
-  if (!mailer) {
-    console.warn(`[email] SMTP not configured; invoice ${params.invoiceNumber} not emailed`);
-    return;
-  }
-  await mailer.sendMail({
+}): Promise<boolean> {
+  return send({
     from: FROM,
     to: params.to,
     subject: `Purchase confirmed: ${params.bundleTitle}`,
     html: invoiceEmailHtml(params),
-    attachments: [
-      {
-        filename: `${params.invoiceNumber}.pdf`,
-        content: params.invoicePdfBuffer,
-      },
-    ],
+    attachments: [{ filename: `${params.invoiceNumber}.pdf`, content: params.invoicePdfBuffer }],
   });
 }
 
-export async function sendSessionAlertEmail(to: string, deviceLabel: string) {
-  const mailer = transporter();
-  if (!mailer) return;
-  await mailer.sendMail({
-    from: FROM,
-    to,
-    subject: "You were logged out of another device",
-    html: sessionAlertEmailHtml(deviceLabel),
-  });
+export async function sendSessionAlertEmail(to: string, deviceLabel: string): Promise<boolean> {
+  return send({ from: FROM, to, subject: "You were logged out of another device", html: sessionAlertEmailHtml(deviceLabel) });
 }
