@@ -65,7 +65,7 @@ export async function Footer() {
                 href={settings.whatsappLink}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-1.5 rounded-full bg-emerald-50 px-3 py-1.5 text-xs font-medium text-emerald-700 transition-colors hover:bg-emerald-100"
+                className="inline-flex items-center gap-1.5 rounded-full bg-tone-success-bg px-3 py-1.5 text-xs font-medium text-tone-success-text transition-colors hover:opacity-80"
               >
                 <span aria-hidden>🟢</span> Join our WhatsApp channel
               </a>
@@ -73,7 +73,7 @@ export async function Footer() {
                 href={settings.telegramLink}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-1.5 rounded-full bg-sky-50 px-3 py-1.5 text-xs font-medium text-sky-700 transition-colors hover:bg-sky-100"
+                className="inline-flex items-center gap-1.5 rounded-full bg-tone-info-bg px-3 py-1.5 text-xs font-medium text-tone-info-text transition-colors hover:opacity-80"
               >
                 <span aria-hidden>🔵</span> Join our Telegram channel
               </a>
@@ -90,7 +90,7 @@ export async function Footer() {
                   <span aria-hidden>⬇</span> Download Android App
                 </a>
               ) : (
-                <span className="inline-flex items-center gap-1.5 rounded-full bg-slate-100 px-3 py-1.5 text-xs font-medium text-slate-500">
+                <span className="inline-flex items-center gap-1.5 rounded-full bg-tone-neutral-bg px-3 py-1.5 text-xs font-medium text-tone-neutral-text">
                   <span aria-hidden>⬇</span> Android App
                   <Badge tone="neutral">Coming Soon</Badge>
                 </span>

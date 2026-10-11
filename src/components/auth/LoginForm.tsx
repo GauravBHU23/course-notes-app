@@ -132,7 +132,7 @@ export function LoginForm() {
               setOtpSent(false);
             }}
             className={`flex-1 rounded-lg py-2 text-sm font-medium transition-colors ${
-              method === m ? "bg-white text-brand-700 shadow-sm" : "text-brand-600/70"
+              method === m ? "bg-surface-raised text-brand-700 shadow-sm" : "text-brand-600/70"
             }`}
           >
             {m === "password" ? "Password" : "OTP"}
@@ -179,7 +179,7 @@ export function LoginForm() {
             className="mt-4 flex flex-col gap-4"
           >
             {otpUnavailable ? (
-              <p className="rounded-lg bg-amber-50 p-3 text-sm text-amber-700">
+              <p className="rounded-lg bg-tone-warning-bg p-3 text-sm text-tone-warning-text">
                 Mobile OTP login is coming soon. Please use email OTP or password login for now.
               </p>
             ) : !otpSent ? (

@@ -51,7 +51,7 @@ export function AdminSidebar() {
       </nav>
       <button
         onClick={handleLogout}
-        className="mt-4 flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium text-red-600 hover:bg-red-50"
+        className="mt-4 flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium text-red-600 hover:bg-tone-danger-bg"
       >
         🚪 Log out
       </button>

@@ -13,12 +13,12 @@ export default async function LoginPage({
   return (
     <Suspense>
       {reason === "session_ended" && (
-        <div className="mb-4 rounded-xl bg-amber-50 p-3 text-center text-sm text-amber-700">
+        <div className="mb-4 rounded-xl bg-tone-warning-bg p-3 text-center text-sm text-tone-warning-text">
           You were signed out because your account was logged in elsewhere.
         </div>
       )}
       {signup === "success" && (
-        <div className="mb-4 rounded-xl bg-emerald-50 p-3 text-center text-sm text-emerald-700">
+        <div className="mb-4 rounded-xl bg-tone-success-bg p-3 text-center text-sm text-tone-success-text">
           Account created! Please log in.
         </div>
       )}

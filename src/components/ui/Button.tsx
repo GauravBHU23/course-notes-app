@@ -24,7 +24,7 @@ interface ButtonProps extends Omit<ButtonHTMLAttributes<HTMLButtonElement>, Conf
 const variantClasses: Record<Variant, string> = {
   primary:
     "bg-gradient-to-r from-brand-600 to-accent-500 text-white shadow-lg shadow-brand-600/20 hover:shadow-brand-600/30",
-  secondary: "bg-white text-brand-700 border border-border-subtle hover:bg-brand-50",
+  secondary: "bg-surface text-brand-700 border border-border-subtle hover:bg-brand-50",
   ghost: "bg-transparent text-foreground hover:bg-brand-50",
   danger: "bg-red-600 text-white hover:bg-red-700",
 };

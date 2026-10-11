@@ -22,9 +22,9 @@ const titles: Record<Status, string> = {
 };
 
 const colors: Record<Status, string> = {
-  pending: "bg-amber-50 text-amber-600",
-  success: "bg-emerald-50 text-emerald-600",
-  failed: "bg-red-50 text-red-600",
+  pending: "bg-tone-warning-bg text-tone-warning-text",
+  success: "bg-tone-success-bg text-tone-success-text",
+  failed: "bg-tone-danger-bg text-tone-danger-text",
 };
 
 export function PaymentStatus({ status, children }: PaymentStatusProps) {

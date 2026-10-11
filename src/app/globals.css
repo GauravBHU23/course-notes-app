@@ -10,9 +10,20 @@
   --brand-700: #4338ca;
   --accent-500: #7c3aed;
   --surface: #ffffff;
+  --surface-raised: #ffffff;
   --border-subtle: #e2e8f0;
   --hero-gradient-from: var(--brand-50);
   --hero-gradient-via: var(--brand-100);
+  --tone-success-bg: #ecfdf5;
+  --tone-success-text: #047857;
+  --tone-warning-bg: #fffbeb;
+  --tone-warning-text: #b45309;
+  --tone-danger-bg: #fef2f2;
+  --tone-danger-text: #b91c1c;
+  --tone-neutral-bg: #f1f5f9;
+  --tone-neutral-text: #475569;
+  --tone-info-bg: #f0f9ff;
+  --tone-info-text: #0369a1;
 }
 
 @theme inline {
@@ -25,9 +36,20 @@
   --color-brand-700: var(--brand-700);
   --color-accent-500: var(--accent-500);
   --color-surface: var(--surface);
+  --color-surface-raised: var(--surface-raised);
   --color-border-subtle: var(--border-subtle);
   --color-hero-gradient-from: var(--hero-gradient-from);
   --color-hero-gradient-via: var(--hero-gradient-via);
+  --color-tone-success-bg: var(--tone-success-bg);
+  --color-tone-success-text: var(--tone-success-text);
+  --color-tone-warning-bg: var(--tone-warning-bg);
+  --color-tone-warning-text: var(--tone-warning-text);
+  --color-tone-danger-bg: var(--tone-danger-bg);
+  --color-tone-danger-text: var(--tone-danger-text);
+  --color-tone-neutral-bg: var(--tone-neutral-bg);
+  --color-tone-neutral-text: var(--tone-neutral-text);
+  --color-tone-info-bg: var(--tone-info-bg);
+  --color-tone-info-text: var(--tone-info-text);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 }
@@ -37,13 +59,30 @@
     --background: #0b1020;
     --foreground: #e2e8f0;
     --surface: #111827;
+    --surface-raised: #1b2333;
     --border-subtle: #1f2937;
-    /* Dark-mode-safe versions of the two hero gradient stops -- the
-       brand-50/100 tokens stay fixed light-lavender for use elsewhere
-       (badges, selected states), so the hero gradient gets its own pair
-       instead of overriding them globally. */
+    /* brand-50/100 are used throughout as a "subtle brand-tinted surface"
+       (badges, pill tabs, sidebar hover states, table header backgrounds)
+       with normal-contrast text on top -- in light mode that's a near-white
+       lavender tint, so it needs a dark, desaturated equivalent here rather
+       than staying fixed light, or text sitting on it becomes unreadable. */
+    --brand-50: #1e2240;
+    --brand-100: #2a2f52;
     --hero-gradient-from: #1a1f3a;
     --hero-gradient-via: #221b4a;
+    /* Same "tinted surface with normal-contrast text on top" issue as
+       brand-50/100 above, for the Badge component's non-brand tones used
+       across admin tables and purchase-status pills. */
+    --tone-success-bg: #0f2e22;
+    --tone-success-text: #6ee7b7;
+    --tone-warning-bg: #332107;
+    --tone-warning-text: #fcd34d;
+    --tone-danger-bg: #3a1414;
+    --tone-danger-text: #fca5a5;
+    --tone-neutral-bg: #1e2636;
+    --tone-neutral-text: #94a3b8;
+    --tone-info-bg: #0c2338;
+    --tone-info-text: #7dd3fc;
   }
 }
 
