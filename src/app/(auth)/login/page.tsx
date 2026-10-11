@@ -1,14 +1,14 @@
 import { Suspense } from "react";
-import { LoginForm } from "@/components/auth/LoginForm";
+import { LoginTabs } from "@/components/auth/LoginTabs";
 
 export const metadata = { title: "Log in | Course and Notes Purchasing App" };
 
 export default async function LoginPage({
   searchParams,
 }: {
-  searchParams: Promise<{ reason?: string; signup?: string }>;
+  searchParams: Promise<{ reason?: string; signup?: string; reset?: string }>;
 }) {
-  const { reason, signup } = await searchParams;
+  const { reason, signup, reset } = await searchParams;
 
   return (
     <Suspense>
@@ -22,7 +22,12 @@ export default async function LoginPage({
           Account created! Please log in.
         </div>
       )}
-      <LoginForm />
+      {reset === "success" && (
+        <div className="mb-4 rounded-xl bg-tone-success-bg p-3 text-center text-sm text-tone-success-text">
+          Password reset successfully. Please log in with your new password.
+        </div>
+      )}
+      <LoginTabs />
     </Suspense>
   );
 }

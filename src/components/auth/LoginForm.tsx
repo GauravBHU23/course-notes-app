@@ -158,13 +158,21 @@ export function LoginForm() {
             onSubmit={handlePasswordLogin}
             className="mt-4 flex flex-col gap-4"
           >
-            <Input
-              label="Password"
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              autoComplete="current-password"
-            />
+            <div>
+              <Input
+                label="Password"
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                autoComplete="current-password"
+              />
+              <a
+                href="/forgot-password"
+                className="mt-1.5 inline-block text-xs text-brand-600 hover:underline"
+              >
+                Forgot password?
+              </a>
+            </div>
             {error && <p className="text-sm text-red-500">{error}</p>}
             <Button type="submit" loading={loading} disabled={!trimmed || !password}>
               Log in
