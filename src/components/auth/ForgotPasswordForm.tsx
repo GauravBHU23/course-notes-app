@@ -38,7 +38,7 @@ export function ForgotPasswordForm() {
         toast.error(message);
         return;
       }
-      setInfo("If this account exists, a reset code has been emailed to you.");
+      setInfo("A reset code has been emailed to you.");
       toast.success("Reset code sent! Check your email.");
       setStep("reset");
     } finally {

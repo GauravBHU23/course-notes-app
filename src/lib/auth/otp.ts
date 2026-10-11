@@ -47,7 +47,7 @@ export async function sendOtp(
   });
 
   if (channel === "email") {
-    const delivered = await sendOtpEmail(identifier, code);
+    const delivered = await sendOtpEmail(identifier, code, purpose === "password_reset" ? "password_reset" : "login");
     if (!delivered) {
       return {
         ok: false,

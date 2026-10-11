@@ -22,10 +22,12 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "Too many requests for this account. Please wait a few minutes." }, { status: 429 });
   }
 
-  // Don't reveal whether the account exists either way.
   const profile = await resolveIdentifierToProfile(identifier);
   if (!profile) {
-    return NextResponse.json({ ok: true, message: "If this account exists, an OTP has been sent." });
+    return NextResponse.json(
+      { error: "No account associated with this email. Please check and try again, or sign up." },
+      { status: 404 }
+    );
   }
 
   if (!isEmailIdentifier(identifier)) {
@@ -39,5 +41,5 @@ export async function POST(req: NextRequest) {
   if (!result.ok) {
     return NextResponse.json({ error: result.message }, { status: 400 });
   }
-  return NextResponse.json({ ok: true, message: "If this account exists, an OTP has been sent." });
+  return NextResponse.json({ ok: true, message: "A reset code has been emailed to you." });
 }

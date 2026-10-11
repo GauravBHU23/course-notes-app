@@ -1,6 +1,7 @@
 import "server-only";
 import nodemailer from "nodemailer";
 import { otpEmailHtml } from "@/lib/email/templates/otpEmail";
+import { passwordResetEmailHtml } from "@/lib/email/templates/passwordResetEmail";
 import { welcomeEmailHtml } from "@/lib/email/templates/welcomeEmail";
 import { invoiceEmailHtml } from "@/lib/email/templates/invoiceEmail";
 import { sessionAlertEmailHtml } from "@/lib/email/templates/sessionAlertEmail";
@@ -49,7 +50,12 @@ async function send(mail: Parameters<ReturnType<typeof nodemailer.createTranspor
   }
 }
 
-export async function sendOtpEmail(to: string, code: string): Promise<boolean> {
+export type OtpEmailPurpose = "login" | "signup" | "password_reset";
+
+export async function sendOtpEmail(to: string, code: string, purpose: OtpEmailPurpose = "login"): Promise<boolean> {
+  if (purpose === "password_reset") {
+    return send({ from: FROM, to, subject: "Your password reset code", html: passwordResetEmailHtml(code) });
+  }
   return send({ from: FROM, to, subject: "Your login OTP", html: otpEmailHtml(code) });
 }
 
