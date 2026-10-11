@@ -6,7 +6,7 @@ export default function AuthLayout({ children }: { children: React.ReactNode }) 
       <div className="w-full max-w-md">
         <div className="mb-6 text-center">
           <Link href="/" className="text-xl font-bold text-brand-700">
-            ExamPrep Store
+            Course and Notes Purchasing App
           </Link>
         </div>
         {children}

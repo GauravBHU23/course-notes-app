@@ -10,11 +10,11 @@ import { Footer } from "@/components/layout/Footer";
 import type { ExamCategory, BundlePublic } from "@/types/domain";
 
 export const metadata: Metadata = {
-  title: "ExamPrep Store — SSC, Railway, Bank, UGC NET, BPSC, TRE Notes & Test Series",
+  title: "Course and Notes Purchasing App — SSC, Railway, Bank, UGC NET, BPSC, TRE Notes & Test Series",
   description:
     "Buy exam-ready PDF notes and test series for SSC, Railway, Bank, UGC NET, BPSC and TRE exams. Affordable pricing, instant access, secure viewing.",
   openGraph: {
-    title: "ExamPrep Store — Exam Notes & Test Series",
+    title: "Course and Notes Purchasing App — Exam Notes & Test Series",
     description:
       "Curated PDF notes and test series for SSC, Railway, Bank, UGC NET, BPSC and TRE aspirants.",
     type: "website",

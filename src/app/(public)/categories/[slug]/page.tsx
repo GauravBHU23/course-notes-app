@@ -36,10 +36,10 @@ export async function generateMetadata({ params }: CategoryPageProps): Promise<M
   const category = await getCategory(slug);
 
   if (!category) {
-    return { title: "Category not found — ExamPrep Store" };
+    return { title: "Category not found — Course and Notes Purchasing App" };
   }
 
-  const title = `${category.name} Notes & Test Series — ExamPrep Store`;
+  const title = `${category.name} Notes & Test Series — Course and Notes Purchasing App`;
   const description =
     category.description ??
     `Browse exam-ready PDF notes and test series bundles for ${category.name}.`;

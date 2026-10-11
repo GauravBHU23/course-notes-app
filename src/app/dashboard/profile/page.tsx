@@ -2,7 +2,7 @@ import { getCurrentProfile } from "@/lib/auth/getCurrentProfile";
 import { Card } from "@/components/ui/Card";
 import { Badge } from "@/components/ui/Badge";
 
-export const metadata = { title: "Profile | ExamPrep Store" };
+export const metadata = { title: "Profile | Course and Notes Purchasing App" };
 
 export default async function ProfilePage() {
   const current = await getCurrentProfile("student");

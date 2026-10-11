@@ -13,10 +13,11 @@ export function Header() {
     <header className="sticky top-0 z-40 border-b border-border-subtle bg-surface/80 backdrop-blur-md">
       <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-4 sm:px-6">
         <Link href="/" className="flex items-center gap-2 text-lg font-bold text-brand-700">
-          <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-brand-600 to-accent-500 text-sm text-white">
-            E
+          <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-gradient-to-br from-brand-600 to-accent-500 text-xs text-white">
+            CN
           </span>
-          ExamPrep Store
+          <span className="hidden sm:inline">Course and Notes Purchasing App</span>
+          <span className="sm:hidden">Course &amp; Notes</span>
         </Link>
 
         <nav className="hidden items-center gap-6 sm:flex">

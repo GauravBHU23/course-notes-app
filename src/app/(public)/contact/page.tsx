@@ -6,11 +6,11 @@ import { TelegramIcon } from "@/components/icons/TelegramIcon";
 import { getPublicSettings } from "@/lib/settings/getPublicSettings";
 
 export const metadata: Metadata = {
-  title: "Contact & Support — ExamPrep Store",
+  title: "Contact & Support — Course and Notes Purchasing App",
   description:
-    "Having trouble logging in or viewing a PDF? Contact the ExamPrep Store administrator via WhatsApp, Telegram or email.",
+    "Having trouble logging in or viewing a PDF? Contact the Course and Notes Purchasing App administrator via WhatsApp, Telegram or email.",
   openGraph: {
-    title: "Contact & Support — ExamPrep Store",
+    title: "Contact & Support — Course and Notes Purchasing App",
     description: "Get help with login, purchases or PDF viewing issues.",
     type: "website",
   },

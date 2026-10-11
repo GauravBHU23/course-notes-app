@@ -68,7 +68,7 @@ export function InstallPrompt() {
           &darr;
         </span>
         <div className="flex-1 text-sm">
-          <p className="font-medium text-foreground">Install ExamPrep Store</p>
+          <p className="font-medium text-foreground">Install Course and Notes Purchasing App</p>
           <p className="text-foreground/60">Add it to your home screen for quick access.</p>
         </div>
         <Button size="sm" onClick={handleInstall}>

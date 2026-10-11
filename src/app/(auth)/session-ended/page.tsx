@@ -2,7 +2,7 @@ import Link from "next/link";
 import { Card } from "@/components/ui/Card";
 import { Button } from "@/components/ui/Button";
 
-export const metadata = { title: "Session ended | ExamPrep Store" };
+export const metadata = { title: "Session ended | Course and Notes Purchasing App" };
 
 export default async function SessionEndedPage({
   searchParams,

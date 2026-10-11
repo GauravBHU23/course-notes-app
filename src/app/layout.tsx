@@ -16,7 +16,7 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: {
-    default: "ExamPrep Store — SSC, Railway, Bank, UGC NET, BPSC, TRE Notes & Test Series",
+    default: "Course and Notes Purchasing App — SSC, Railway, Bank, UGC NET, BPSC, TRE Notes & Test Series",
     template: "%s",
   },
   description:

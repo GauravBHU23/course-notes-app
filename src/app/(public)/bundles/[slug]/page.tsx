@@ -47,10 +47,10 @@ export async function generateMetadata({ params }: BundlePageProps): Promise<Met
   const bundle = await getBundle(slug);
 
   if (!bundle) {
-    return { title: "Bundle not found — ExamPrep Store" };
+    return { title: "Bundle not found — Course and Notes Purchasing App" };
   }
 
-  const title = `${bundle.title} (${bundle.category_name}) — ExamPrep Store`;
+  const title = `${bundle.title} (${bundle.category_name}) — Course and Notes Purchasing App`;
   const description =
     bundle.description ??
     `${bundle.title} — exam-ready notes for ${bundle.category_name} at ${formatPriceInr(

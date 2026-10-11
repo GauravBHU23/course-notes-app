@@ -8,7 +8,7 @@ export function emailShell(title: string, bodyHtml: string): string {
           <table width="480" cellpadding="0" cellspacing="0" style="background:#ffffff;border-radius:12px;overflow:hidden;">
             <tr>
               <td style="background:linear-gradient(135deg,#4f46e5,#7c3aed);padding:24px 32px;">
-                <span style="color:#ffffff;font-size:20px;font-weight:bold;">ExamPrep Store</span>
+                <span style="color:#ffffff;font-size:20px;font-weight:bold;">Course and Notes Purchasing App</span>
               </td>
             </tr>
             <tr>

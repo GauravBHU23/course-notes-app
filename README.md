@@ -1,4 +1,4 @@
-# ExamPrep Store
+# Course and Notes Purchasing App
 
 Platform for selling access to exam-prep PDFs/notes (SSC, Railway, Bank, UGC NET, BPSC, TRE, etc.) with view-only watermarked PDF access, single-active-session login, OTP/password auth, and Cashfree payments.
 

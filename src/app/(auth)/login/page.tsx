@@ -1,7 +1,7 @@
 import { Suspense } from "react";
 import { LoginForm } from "@/components/auth/LoginForm";
 
-export const metadata = { title: "Log in | ExamPrep Store" };
+export const metadata = { title: "Log in | Course and Notes Purchasing App" };
 
 export default async function LoginPage({
   searchParams,

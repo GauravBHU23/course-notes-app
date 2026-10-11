@@ -24,7 +24,7 @@ export function DashboardSidebar() {
   return (
     <aside className="flex h-full w-64 flex-col border-r border-border-subtle bg-surface px-4 py-6">
       <Link href="/" className="mb-8 px-2 text-lg font-bold text-brand-700">
-        ExamPrep Store
+        Course and Notes Purchasing App
       </Link>
       <nav className="flex flex-1 flex-col gap-1">
         {links.map((link) => (

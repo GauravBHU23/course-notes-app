@@ -4,11 +4,11 @@ import { AnimatedBundleGrid } from "@/components/marketing/AnimatedBundleGrid";
 import type { BundlePublic } from "@/types/domain";
 
 export const metadata: Metadata = {
-  title: "Pricing — ExamPrep Store",
+  title: "Pricing — Course and Notes Purchasing App",
   description:
     "Browse every exam-prep bundle across SSC, Railway, Bank, UGC NET, BPSC and TRE with transparent pricing and validity periods.",
   openGraph: {
-    title: "Pricing — ExamPrep Store",
+    title: "Pricing — Course and Notes Purchasing App",
     description: "Transparent pricing for every exam-prep bundle, grouped by category.",
     type: "website",
   },

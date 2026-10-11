@@ -1,6 +1,6 @@
 import { Card } from "@/components/ui/Card";
 
-export const metadata = { title: "Support | ExamPrep Store" };
+export const metadata = { title: "Support | Course and Notes Purchasing App" };
 
 export default function SupportPage() {
   return (

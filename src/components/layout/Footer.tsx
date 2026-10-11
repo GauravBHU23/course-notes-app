@@ -23,10 +23,10 @@ export async function Footer() {
         <div className="flex flex-col gap-8 sm:flex-row sm:justify-between">
           <div>
             <Link href="/" className="flex items-center gap-2 text-lg font-bold text-brand-700">
-              <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-gradient-to-br from-brand-600 to-accent-500 text-xs text-white">
-                E
+              <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-gradient-to-br from-brand-600 to-accent-500 text-xs text-white">
+                CN
               </span>
-              ExamPrep Store
+              Course and Notes Purchasing App
             </Link>
             <p className="mt-3 max-w-xs text-sm text-foreground/60">
               Exam-ready notes and test series for SSC, Railway, Bank, UGC NET, BPSC and TRE
@@ -106,7 +106,7 @@ export async function Footer() {
         </div>
 
         <div className="mt-8 flex flex-col items-center justify-between gap-2 border-t border-border-subtle pt-6 text-xs text-foreground/50 sm:flex-row">
-          <span>&copy; {year} ExamPrep Store. All rights reserved.</span>
+          <span>&copy; {year} Course and Notes Purchasing App. All rights reserved.</span>
           <span>Made for serious exam aspirants.</span>
         </div>
       </div>

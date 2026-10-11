@@ -26,9 +26,10 @@ export async function generateInvoicePdf(data: InvoiceData): Promise<Buffer> {
   let y = 780;
   const left = 50;
 
-  page.drawText("ExamPrep Store", { x: left, y, size: 20, font: bold, color: brand });
+  page.drawText("Course and Notes", { x: left, y, size: 20, font: bold, color: brand });
+  page.drawText("Purchasing App", { x: left, y: y - 20, size: 11, font, color: gray });
   page.drawText("TAX INVOICE", { x: 420, y, size: 14, font: bold, color: dark });
-  y -= 30;
+  y -= 44;
   page.drawLine({ start: { x: left, y }, end: { x: 545, y }, thickness: 1, color: gray });
 
   y -= 30;

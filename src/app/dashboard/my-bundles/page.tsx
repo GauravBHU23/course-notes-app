@@ -5,7 +5,7 @@ import { Card } from "@/components/ui/Card";
 import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
 
-export const metadata = { title: "My Bundles | ExamPrep Store" };
+export const metadata = { title: "My Bundles | Course and Notes Purchasing App" };
 
 export default async function MyBundlesPage() {
   const current = await getCurrentProfile("student");

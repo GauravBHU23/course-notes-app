@@ -3,7 +3,7 @@ import { getCurrentProfile } from "@/lib/auth/getCurrentProfile";
 import { Card } from "@/components/ui/Card";
 import { Badge } from "@/components/ui/Badge";
 
-export const metadata = { title: "Purchases | ExamPrep Store" };
+export const metadata = { title: "Purchases | Course and Notes Purchasing App" };
 
 const statusTone = {
   success: "success",

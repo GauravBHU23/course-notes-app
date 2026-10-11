@@ -1,6 +1,6 @@
 {
-  "name": "ExamPrep Store",
-  "short_name": "ExamPrep",
+  "name": "Course and Notes Purchasing App",
+  "short_name": "Course & Notes",
   "description": "Exam-ready notes and test series for SSC, Railway, Bank, UGC NET, BPSC and TRE aspirants.",
   "start_url": "/",
   "display": "standalone",
