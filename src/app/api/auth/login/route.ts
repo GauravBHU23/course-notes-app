@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { cookies } from "next/headers";
-import { createAnonClient } from "@/lib/supabase/anon";
+import { createClient as createServerSupabaseClient } from "@/lib/supabase/server";
 import { resolveIdentifierToProfile } from "@/lib/auth/resolveIdentifier";
 import { checkAndClearLockout, recordFailedAttempt, resetFailedAttempts, logLoginAttempt, LOCKOUT_MAX_ATTEMPTS } from "@/lib/auth/lockout";
 import { createSession } from "@/lib/auth/session";
@@ -38,7 +38,14 @@ export async function POST(req: NextRequest) {
     );
   }
 
-  const supabase = createAnonClient();
+  // Use the cookie-aware server client (not the throwaway anon client) so
+  // Supabase's own auth session actually reaches the browser as cookies --
+  // without this, the browser-side realtime subscription in SessionGuard
+  // has no JWT to authorize its RLS-gated channel with, and the instant
+  // force-logout broadcast silently never arrives (the per-request session
+  // check in proxy.ts still catches it on the next navigation regardless,
+  // but the "kick an already-open idle tab immediately" UX requires this).
+  const supabase = await createServerSupabaseClient();
   const { error: authError } = await supabase.auth.signInWithPassword({
     email: profile.email,
     password,

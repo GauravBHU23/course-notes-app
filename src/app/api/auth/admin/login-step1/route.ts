@@ -45,6 +45,13 @@ export async function POST(req: NextRequest) {
     );
   }
 
+  // Deliberately the throwaway anon client, NOT the cookie-aware server
+  // client: this only checks the password is correct. Using the
+  // cookie-writing client here would set a real Supabase Auth session in
+  // the browser on password alone, before the OTP in step 2 -- defeating
+  // the point of a mandatory second factor. The real session (needed for
+  // the realtime instant-kick subscription) is established in step 2,
+  // after the OTP also succeeds; see establishSupabaseSession there.
   const supabase = createAnonClient();
   const { error: authError } = await supabase.auth.signInWithPassword({
     email: profile.email,

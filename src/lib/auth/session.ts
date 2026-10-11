@@ -75,11 +75,21 @@ export async function createSession({
   // Push an instant force-logout signal to any other open tab/browser for
   // this user. Authoritative enforcement is still the per-request DB check
   // below; this just makes an already-open idle tab react immediately.
-  await supabase.channel(`user-session-${userId}`).send({
+  //
+  // config: { private: true } is required here to match the subscriber side
+  // (SessionGuard) -- a private broadcast channel and a public one with the
+  // identical topic string are different routing paths in Supabase
+  // Realtime's authorization model. Sending without it silently does not
+  // reach clients who subscribed with private: true, confirmed by direct
+  // testing (subscription succeeded, SUBSCRIBED status, but no message ever
+  // arrived until this was added).
+  const broadcastChannel = supabase.channel(`user-session-${userId}`, { config: { private: true } });
+  await broadcastChannel.send({
     type: "broadcast",
     event: "force_logout",
     payload: { newSessionId: session.id },
   });
+  await supabase.removeChannel(broadcastChannel);
 
   return {
     sessionId: session.id,
@@ -155,9 +165,11 @@ export async function revokeAllSessionsForUser(userId: string, reason: "admin_re
     .eq("user_id", userId)
     .is("revoked_at", null);
   await supabase.rpc("bump_session_version", { p_user_id: userId });
-  await supabase.channel(`user-session-${userId}`).send({
+  const broadcastChannel = supabase.channel(`user-session-${userId}`, { config: { private: true } });
+  await broadcastChannel.send({
     type: "broadcast",
     event: "force_logout",
     payload: { newSessionId: null },
   });
+  await supabase.removeChannel(broadcastChannel);
 }

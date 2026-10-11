@@ -5,6 +5,7 @@ import { verifyOtp } from "@/lib/auth/otp";
 import { resetFailedAttempts, logLoginAttempt } from "@/lib/auth/lockout";
 import { createSession } from "@/lib/auth/session";
 import { setSessionCookie } from "@/lib/auth/cookies";
+import { establishSupabaseSession } from "@/lib/auth/establishSupabaseSession";
 import { getClientIp } from "@/lib/utils/request";
 import { rateLimit } from "@/lib/utils/rateLimiter";
 import { otpVerifySchema } from "@/lib/utils/validators";
@@ -48,6 +49,12 @@ export async function POST(req: NextRequest) {
 
   await resetFailedAttempts(profile.id);
   await logLoginAttempt({ identifier, success: true, ipAddress: ip, userAgent });
+
+  // Only now -- after both factors have succeeded -- does the browser get
+  // a real Supabase Auth session too (needed for the realtime instant-kick
+  // subscription). Doing this in step 1 would leak a valid Supabase session
+  // to the browser on password-alone, defeating the point of requiring OTP.
+  await establishSupabaseSession(profile.email);
 
   const { cookiePayload } = await createSession({ userId: profile.id, ipAddress: ip, userAgent });
   const cookieStore = await cookies();

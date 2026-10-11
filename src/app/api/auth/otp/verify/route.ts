@@ -6,6 +6,7 @@ import { checkAndClearLockout, resetFailedAttempts, logLoginAttempt } from "@/li
 import { verifyOtp } from "@/lib/auth/otp";
 import { createSession } from "@/lib/auth/session";
 import { setSessionCookie } from "@/lib/auth/cookies";
+import { establishSupabaseSession } from "@/lib/auth/establishSupabaseSession";
 import { getClientIp } from "@/lib/utils/request";
 import { rateLimit } from "@/lib/utils/rateLimiter";
 import { otpVerifySchema } from "@/lib/utils/validators";
@@ -61,6 +62,11 @@ export async function POST(req: NextRequest) {
   if (lookupError || !authUser?.user) {
     return NextResponse.json({ error: "Account not found." }, { status: 404 });
   }
+
+  // Best-effort: our own session cookie below is the actual access control
+  // and must not be blocked by this failing, but without it the browser-side
+  // realtime subscription (instant force-logout) silently won't authorize.
+  await establishSupabaseSession(profile.email);
 
   const { cookiePayload } = await createSession({ userId: profile.id, ipAddress: ip, userAgent });
   const cookieStore = await cookies();
