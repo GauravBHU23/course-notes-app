@@ -13,7 +13,7 @@ export function AnimatedHero() {
         className="absolute inset-0 -z-10"
         style={{
           background:
-            "linear-gradient(120deg, var(--brand-50), var(--brand-100), var(--background))",
+            "linear-gradient(120deg, var(--hero-gradient-from), var(--hero-gradient-via), var(--background))",
           backgroundSize: "200% 200%",
         }}
         animate={{ backgroundPosition: ["0% 50%", "100% 50%", "0% 50%"] }}
