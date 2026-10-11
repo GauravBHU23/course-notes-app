@@ -55,7 +55,9 @@ export function VisitorCounterTicker() {
   }, []);
 
   return (
-    <div className="text-sm text-foreground/60">
+    <div className="flex items-center gap-1.5 text-sm text-foreground/60">
+      <span aria-hidden>👁</span>
+      Total visitors:{" "}
       <AnimatePresence mode="wait">
         {count !== null ? (
           <motion.span
@@ -70,8 +72,7 @@ export function VisitorCounterTicker() {
         ) : (
           <span className="inline-block h-4 w-10 animate-pulse rounded bg-border-subtle align-middle" />
         )}
-      </AnimatePresence>{" "}
-      students trust us
+      </AnimatePresence>
     </div>
   );
 }

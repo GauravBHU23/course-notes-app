@@ -32,9 +32,6 @@ export async function Footer() {
               Exam-ready notes and test series for SSC, Railway, Bank, UGC NET, BPSC and TRE
               aspirants.
             </p>
-            <div className="mt-4">
-              <VisitorCounterTicker />
-            </div>
           </div>
 
           <div className="flex flex-col gap-2">
@@ -105,8 +102,9 @@ export async function Footer() {
           </div>
         </div>
 
-        <div className="mt-8 flex flex-col items-center justify-between gap-2 border-t border-border-subtle pt-6 text-xs text-foreground/50 sm:flex-row">
+        <div className="mt-8 flex flex-col items-center justify-between gap-3 border-t border-border-subtle pt-6 text-xs text-foreground/50 sm:flex-row">
           <span>&copy; {year} Course and Notes Purchasing App. All rights reserved.</span>
+          <VisitorCounterTicker />
           <span>Made for serious exam aspirants.</span>
         </div>
       </div>
