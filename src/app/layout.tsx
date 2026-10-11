@@ -29,12 +29,35 @@ export const viewport: Viewport = {
   themeColor: "#4f46e5",
 };
 
+// Runs before paint/hydration to set data-theme from localStorage/system
+// preference. Must live in the root layout's <head> (not a nested layout's
+// JSX) since it mutates an attribute on <html>, which React's reconciler
+// owns from here -- setting it anywhere else causes a hydration mismatch
+// warning because the attribute changes after the server-rendered markup
+// was produced but before/during React's own reconciliation of this tree.
+const THEME_INIT_SCRIPT = `
+(function () {
+  try {
+    var stored = localStorage.getItem("theme");
+    var theme = stored === "light" || stored === "dark"
+      ? stored
+      : (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+    document.documentElement.setAttribute("data-theme", theme);
+  } catch (e) {}
+})();
+`;
+
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
       lang="en"
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
+      suppressHydrationWarning
     >
+      <head>
+        {/* eslint-disable-next-line @next/next/no-sync-scripts */}
+        <script dangerouslySetInnerHTML={{ __html: THEME_INIT_SCRIPT }} />
+      </head>
       <body className="min-h-full flex flex-col">
         {children}
         <ServiceWorkerRegister />

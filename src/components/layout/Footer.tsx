@@ -3,6 +3,8 @@ import { getPublicSettings } from "@/lib/settings/getPublicSettings";
 import { VisitorCounterTicker } from "@/components/layout/VisitorCounterTicker";
 import { InstallPrompt } from "@/components/pwa/InstallPrompt";
 import { Badge } from "@/components/ui/Badge";
+import { WhatsAppIcon } from "@/components/icons/WhatsAppIcon";
+import { TelegramIcon } from "@/components/icons/TelegramIcon";
 
 const footerLinks = [
   { href: "/", label: "Home" },
@@ -67,7 +69,7 @@ export async function Footer() {
                 rel="noopener noreferrer"
                 className="inline-flex items-center gap-1.5 rounded-full bg-tone-success-bg px-3 py-1.5 text-xs font-medium text-tone-success-text transition-colors hover:opacity-80"
               >
-                <span aria-hidden>🟢</span> Join our WhatsApp channel
+                <WhatsAppIcon className="h-3.5 w-3.5" /> Join our WhatsApp channel
               </a>
               <a
                 href={settings.telegramLink}
@@ -75,7 +77,7 @@ export async function Footer() {
                 rel="noopener noreferrer"
                 className="inline-flex items-center gap-1.5 rounded-full bg-tone-info-bg px-3 py-1.5 text-xs font-medium text-tone-info-text transition-colors hover:opacity-80"
               >
-                <span aria-hidden>🔵</span> Join our Telegram channel
+                <TelegramIcon className="h-3.5 w-3.5" /> Join our Telegram channel
               </a>
             </div>
 

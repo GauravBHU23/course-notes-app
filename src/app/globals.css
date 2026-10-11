@@ -54,25 +54,24 @@
   --font-mono: var(--font-geist-mono);
 }
 
+/*
+  Dark palette applies when the system prefers dark AND the user hasn't
+  explicitly chosen light (data-theme="light"), OR when the user has
+  explicitly chosen dark (data-theme="dark") regardless of system
+  preference. This is the standard pattern for sites that default to
+  following the OS but also offer a manual override toggle.
+*/
 @media (prefers-color-scheme: dark) {
-  :root {
+  :root:not([data-theme="light"]) {
     --background: #0b1020;
     --foreground: #e2e8f0;
     --surface: #111827;
     --surface-raised: #1b2333;
     --border-subtle: #1f2937;
-    /* brand-50/100 are used throughout as a "subtle brand-tinted surface"
-       (badges, pill tabs, sidebar hover states, table header backgrounds)
-       with normal-contrast text on top -- in light mode that's a near-white
-       lavender tint, so it needs a dark, desaturated equivalent here rather
-       than staying fixed light, or text sitting on it becomes unreadable. */
     --brand-50: #1e2240;
     --brand-100: #2a2f52;
     --hero-gradient-from: #1a1f3a;
     --hero-gradient-via: #221b4a;
-    /* Same "tinted surface with normal-contrast text on top" issue as
-       brand-50/100 above, for the Badge component's non-brand tones used
-       across admin tables and purchase-status pills. */
     --tone-success-bg: #0f2e22;
     --tone-success-text: #6ee7b7;
     --tone-warning-bg: #332107;
@@ -84,6 +83,36 @@
     --tone-info-bg: #0c2338;
     --tone-info-text: #7dd3fc;
   }
+}
+
+:root[data-theme="dark"] {
+  --background: #0b1020;
+  --foreground: #e2e8f0;
+  --surface: #111827;
+  --surface-raised: #1b2333;
+  --border-subtle: #1f2937;
+  /* brand-50/100 are used throughout as a "subtle brand-tinted surface"
+     (badges, pill tabs, sidebar hover states, table header backgrounds)
+     with normal-contrast text on top -- in light mode that's a near-white
+     lavender tint, so it needs a dark, desaturated equivalent here rather
+     than staying fixed light, or text sitting on it becomes unreadable. */
+  --brand-50: #1e2240;
+  --brand-100: #2a2f52;
+  --hero-gradient-from: #1a1f3a;
+  --hero-gradient-via: #221b4a;
+  /* Same "tinted surface with normal-contrast text on top" issue as
+     brand-50/100 above, for the Badge component's non-brand tones used
+     across admin tables and purchase-status pills. */
+  --tone-success-bg: #0f2e22;
+  --tone-success-text: #6ee7b7;
+  --tone-warning-bg: #332107;
+  --tone-warning-text: #fcd34d;
+  --tone-danger-bg: #3a1414;
+  --tone-danger-text: #fca5a5;
+  --tone-neutral-bg: #1e2636;
+  --tone-neutral-text: #94a3b8;
+  --tone-info-bg: #0c2338;
+  --tone-info-text: #7dd3fc;
 }
 
 body {

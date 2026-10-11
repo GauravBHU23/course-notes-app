@@ -1,5 +1,7 @@
 import { getPublicSettings } from "@/lib/settings/getPublicSettings";
 import { Card } from "@/components/ui/Card";
+import { WhatsAppIcon } from "@/components/icons/WhatsAppIcon";
+import { TelegramIcon } from "@/components/icons/TelegramIcon";
 
 // Server Component: reusable WhatsApp/Telegram/email/phone block driven by
 // the settings table. Intended for the contact/support pages — safe to drop
@@ -19,7 +21,7 @@ export async function ContactLinks() {
             rel="noopener noreferrer"
             className="inline-flex items-center gap-2 rounded-full bg-tone-success-bg px-4 py-2 text-sm font-medium text-tone-success-text transition-colors hover:opacity-80"
           >
-            <span aria-hidden>🟢</span> WhatsApp Channel
+            <WhatsAppIcon className="h-4 w-4" /> WhatsApp Channel
           </a>
         )}
         {settings.telegramLink !== "#" && (
@@ -29,7 +31,7 @@ export async function ContactLinks() {
             rel="noopener noreferrer"
             className="inline-flex items-center gap-2 rounded-full bg-tone-info-bg px-4 py-2 text-sm font-medium text-tone-info-text transition-colors hover:opacity-80"
           >
-            <span aria-hidden>🔵</span> Telegram Channel
+            <TelegramIcon className="h-4 w-4" /> Telegram Channel
           </a>
         )}
       </div>
