@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { load } from "@cashfreepayments/cashfree-js";
+import { toast } from "sonner";
 import { Button } from "@/components/ui/Button";
 import { PriceSummaryCard } from "@/components/checkout/PriceSummaryCard";
 
@@ -28,7 +29,9 @@ export function CashfreeCheckout({ bundleSlug, bundleTitle, amountInr, validityD
       });
       const data = await res.json();
       if (!res.ok) {
-        setError(data.error ?? "Could not start checkout.");
+        const message = data.error ?? "Could not start checkout.";
+        setError(message);
+        toast.error(message);
         setLoading(false);
         return;
       }
@@ -41,7 +44,9 @@ export function CashfreeCheckout({ bundleSlug, bundleTitle, amountInr, validityD
         redirectTarget: "_self",
       });
     } catch {
-      setError("Something went wrong while starting the payment. Please try again.");
+      const message = "Something went wrong while starting the payment. Please try again.";
+      setError(message);
+      toast.error(message);
       setLoading(false);
     }
   }
@@ -56,7 +61,7 @@ export function CashfreeCheckout({ bundleSlug, bundleTitle, amountInr, validityD
       <PriceSummaryCard bundleTitle={bundleTitle} amountInr={amountInr} validityDays={validityDays} />
 
       <motion.div
-        className="rounded-2xl border border-border-subtle bg-gradient-to-br from-brand-50 via-white to-accent-500/5 p-6 text-center shadow-sm"
+        className="rounded-2xl border border-border-subtle bg-gradient-to-br from-brand-50 via-surface to-accent-500/5 p-6 text-center shadow-sm"
         whileHover={{ scale: 1.01 }}
       >
         <p className="mb-4 text-sm text-foreground/60">

@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 import { Card } from "@/components/ui/Card";
 import { Input } from "@/components/ui/Input";
 import { Button } from "@/components/ui/Button";
@@ -32,10 +33,13 @@ export function ForgotPasswordForm() {
       });
       const data = await res.json();
       if (!res.ok) {
-        setError(data.error ?? "Could not send reset code.");
+        const message = data.error ?? "Could not send reset code.";
+        setError(message);
+        toast.error(message);
         return;
       }
       setInfo("If this account exists, a reset code has been emailed to you.");
+      toast.success("Reset code sent! Check your email.");
       setStep("reset");
     } finally {
       setLoading(false);
@@ -46,7 +50,9 @@ export function ForgotPasswordForm() {
     e.preventDefault();
     setError(null);
     if (newPassword !== confirmPassword) {
-      setError("Passwords do not match.");
+      const message = "Passwords do not match.";
+      setError(message);
+      toast.error(message);
       return;
     }
     setLoading(true);
@@ -58,9 +64,12 @@ export function ForgotPasswordForm() {
       });
       const data = await res.json();
       if (!res.ok) {
-        setError(data.error ?? "Could not reset password.");
+        const message = data.error ?? "Could not reset password.";
+        setError(message);
+        toast.error(message);
         return;
       }
+      toast.success("Password reset successfully!");
       router.push("/login?reset=success");
     } finally {
       setLoading(false);

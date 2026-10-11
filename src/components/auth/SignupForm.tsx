@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 import { Card } from "@/components/ui/Card";
 import { Input } from "@/components/ui/Input";
 import { Button } from "@/components/ui/Button";
@@ -27,9 +28,12 @@ export function SignupForm() {
       });
       const data = await res.json();
       if (!res.ok) {
-        setError(data.error ?? "Could not create account.");
+        const message = data.error ?? "Could not create account.";
+        setError(message);
+        toast.error(message);
         return;
       }
+      toast.success("Account created successfully!");
       router.push("/login?signup=success");
     } finally {
       setLoading(false);

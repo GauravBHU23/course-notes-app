@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
+import { toast } from "sonner";
 import { Card } from "@/components/ui/Card";
 import { Input } from "@/components/ui/Input";
 import { Button } from "@/components/ui/Button";
@@ -49,9 +50,12 @@ export function LoginForm() {
       const data = await res.json();
       if (!res.ok) {
         if (res.status === 423) setLockSeconds(data.remainingSeconds ?? 300);
-        setError(data.error ?? "Login failed.");
+        const message = data.error ?? "Login failed.";
+        setError(message);
+        toast.error(message);
         return;
       }
+      toast.success("Logged in successfully!");
       router.push(data.role === "admin" ? "/admin" : "/dashboard");
     } finally {
       setLoading(false);
@@ -70,10 +74,13 @@ export function LoginForm() {
       const data = await res.json();
       if (!res.ok) {
         if (res.status === 423) setLockSeconds(data.remainingSeconds ?? 300);
-        setError(data.error ?? "Could not send OTP.");
+        const message = data.error ?? "Could not send OTP.";
+        setError(message);
+        toast.error(message);
         return;
       }
       setOtpSent(true);
+      toast.success("OTP sent! Check your email.");
     } finally {
       setLoading(false);
     }
@@ -92,9 +99,12 @@ export function LoginForm() {
       const data = await res.json();
       if (!res.ok) {
         if (res.status === 423) setLockSeconds(data.remainingSeconds ?? 300);
-        setError(data.error ?? "Invalid OTP.");
+        const message = data.error ?? "Invalid OTP.";
+        setError(message);
+        toast.error(message);
         return;
       }
+      toast.success("Logged in successfully!");
       router.push(data.role === "admin" ? "/admin" : "/dashboard");
     } finally {
       setLoading(false);
