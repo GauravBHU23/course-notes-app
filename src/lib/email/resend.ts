@@ -5,6 +5,7 @@ import { passwordResetEmailHtml } from "@/lib/email/templates/passwordResetEmail
 import { welcomeEmailHtml } from "@/lib/email/templates/welcomeEmail";
 import { invoiceEmailHtml } from "@/lib/email/templates/invoiceEmail";
 import { sessionAlertEmailHtml } from "@/lib/email/templates/sessionAlertEmail";
+import { contactQueryEmailHtml } from "@/lib/email/templates/contactQueryEmail";
 
 // Despite the filename (kept for import-path stability across the codebase),
 // this sends via SMTP (configured for Gmail by default) rather than Resend.
@@ -83,4 +84,20 @@ export async function sendInvoiceEmail(params: {
 
 export async function sendSessionAlertEmail(to: string, deviceLabel: string): Promise<boolean> {
   return send({ from: FROM, to, subject: "You were logged out of another device", html: sessionAlertEmailHtml(deviceLabel) });
+}
+
+export async function sendContactQueryEmail(params: {
+  adminEmail: string;
+  name: string;
+  email: string;
+  subject: string;
+  message: string;
+}): Promise<boolean> {
+  return send({
+    from: FROM,
+    to: params.adminEmail,
+    replyTo: params.email,
+    subject: `[Contact] ${params.subject}`,
+    html: contactQueryEmailHtml(params),
+  });
 }

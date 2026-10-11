@@ -123,3 +123,15 @@ export interface PdfAccessTokenPayload {
   iat: number;
   exp: number;
 }
+
+export interface ContactQuery {
+  id: string;
+  name: string;
+  email: string;
+  subject: string;
+  message: string;
+  user_id: string | null;
+  status: "open" | "resolved";
+  emailed_to_admin: boolean;
+  created_at: string;
+}

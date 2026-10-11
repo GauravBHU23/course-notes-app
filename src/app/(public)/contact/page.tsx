@@ -3,6 +3,7 @@ import { Card } from "@/components/ui/Card";
 import { Button } from "@/components/ui/Button";
 import { WhatsAppIcon } from "@/components/icons/WhatsAppIcon";
 import { TelegramIcon } from "@/components/icons/TelegramIcon";
+import { ContactForm } from "@/components/support/ContactForm";
 import { getPublicSettings } from "@/lib/settings/getPublicSettings";
 
 export const metadata: Metadata = {
@@ -96,6 +97,14 @@ export default async function ContactPage() {
           <li>PDF not loading? Make sure your purchase is still within its validity period.</li>
         </ul>
       </div>
+
+      <Card className="mt-10 p-6 sm:p-8">
+        <h2 className="mb-1 text-lg font-bold text-foreground">Still need help? Send us a message</h2>
+        <p className="mb-6 text-sm text-foreground/60">
+          Fill out the form below and we&apos;ll get back to you by email as soon as possible.
+        </p>
+        <ContactForm />
+      </Card>
     </div>
   );
 }

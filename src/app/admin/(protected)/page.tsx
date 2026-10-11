@@ -10,6 +10,7 @@ async function getStats() {
     { data: visitsCounter },
     { count: activeSessionsCount },
     { count: lockedCount },
+    { count: openQueriesCount },
   ] = await Promise.all([
     supabase.from("purchases").select("amount_inr").eq("status", "success"),
     supabase.from("purchases").select("id", { count: "exact", head: true }).eq("status", "success"),
@@ -19,6 +20,7 @@ async function getStats() {
       .from("profiles")
       .select("id", { count: "exact", head: true })
       .gt("locked_until", new Date().toISOString()),
+    supabase.from("contact_queries").select("id", { count: "exact", head: true }).eq("status", "open"),
   ]);
 
   const totalRevenue = (revenueRows ?? []).reduce((sum, row) => sum + row.amount_inr, 0);
@@ -29,6 +31,7 @@ async function getStats() {
     totalVisitors: Number(visitsCounter?.value ?? 0),
     activeSessions: activeSessionsCount ?? 0,
     lockedAccounts: lockedCount ?? 0,
+    openQueries: openQueriesCount ?? 0,
   };
 }
 
@@ -60,6 +63,11 @@ export default async function AdminDashboardPage() {
           label="Locked accounts"
           value={stats.lockedAccounts.toLocaleString("en-IN")}
           tone={stats.lockedAccounts > 0 ? "text-red-600" : "text-foreground"}
+        />
+        <StatCard
+          label="Open queries"
+          value={stats.openQueries.toLocaleString("en-IN")}
+          tone={stats.openQueries > 0 ? "text-amber-600" : "text-foreground"}
         />
       </div>
     </div>

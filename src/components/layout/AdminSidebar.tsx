@@ -12,6 +12,7 @@ const links = [
   { href: "/admin/users", label: "Users", icon: "👥" },
   { href: "/admin/purchases", label: "Purchases", icon: "🧾" },
   { href: "/admin/invoices", label: "Invoices", icon: "🧮" },
+  { href: "/admin/queries", label: "Queries", icon: "💬" },
   { href: "/admin/sessions", label: "Sessions", icon: "🔐" },
   { href: "/admin/locked-accounts", label: "Locked Accounts", icon: "🔒" },
   { href: "/admin/settings", label: "Settings", icon: "⚙️" },

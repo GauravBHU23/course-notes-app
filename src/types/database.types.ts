@@ -254,6 +254,29 @@ export interface Database {
           ends_at?: string | null;
         }
       >;
+      contact_queries: Table<
+        {
+          id: string;
+          name: string;
+          email: string;
+          subject: string;
+          message: string;
+          user_id: string | null;
+          status: string;
+          emailed_to_admin: boolean;
+          created_at: string;
+        },
+        {
+          name: string;
+          email: string;
+          subject: string;
+          message: string;
+          user_id?: string | null;
+          status?: string;
+          emailed_to_admin?: boolean;
+        },
+        Partial<{ status: string; emailed_to_admin: boolean }>
+      >;
     };
     Views: {
       bundles_public: {
