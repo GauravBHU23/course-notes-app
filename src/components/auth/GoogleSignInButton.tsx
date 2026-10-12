@@ -24,7 +24,14 @@ export function GoogleSignInButton() {
 
     const { error } = await supabase.auth.signInWithOAuth({
       provider: "google",
-      options: { redirectTo: callbackUrl.toString() },
+      options: {
+        redirectTo: callbackUrl.toString(),
+        // Without this, Google silently reuses the browser's existing
+        // session and skips the account chooser -- surprising on a shared
+        // device, or when testing with a different account than the one
+        // already signed into the browser.
+        queryParams: { prompt: "select_account" },
+      },
     });
 
     if (error) {
