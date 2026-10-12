@@ -39,10 +39,15 @@
           "color": "#4f46e5"
         }
       ],
-      "expo-splash-screen"
+      "expo-splash-screen",
+      "expo-font"
     ],
     "extra": {
-      "router": {}
-    }
+      "router": {},
+      "eas": {
+        "projectId": "5e23de41-ed82-4966-9698-dbdaea0ba229"
+      }
+    },
+    "owner": "gauravkum1275"
   }
 }
