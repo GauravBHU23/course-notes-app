@@ -1,7 +1,7 @@
 import Link from "next/link";
-import { Button } from "@/components/ui/Button";
 import { ThemeToggle } from "@/components/ui/ThemeToggle";
 import { SearchBox } from "@/components/layout/SearchBox";
+import { HeaderAuthActions } from "@/components/layout/HeaderAuthActions";
 
 const navLinks = [
   { href: "/", label: "Home" },
@@ -9,7 +9,12 @@ const navLinks = [
   { href: "/contact", label: "Contact" },
 ];
 
-export function Header() {
+interface HeaderProps {
+  isLoggedIn: boolean;
+  userName?: string;
+}
+
+export function Header({ isLoggedIn, userName }: HeaderProps) {
   return (
     <header className="sticky top-0 z-40 border-b border-border-subtle bg-surface/80 backdrop-blur-md">
       <div className="mx-auto flex max-w-6xl items-center gap-2 px-3 py-3 sm:gap-4 sm:px-6 sm:py-4">
@@ -39,16 +44,7 @@ export function Header() {
 
         <div className="ml-auto flex shrink-0 items-center gap-1 sm:gap-2">
           <ThemeToggle />
-          <Link href="/login">
-            <Button variant="ghost" size="sm" className="px-2 sm:px-5">
-              Login
-            </Button>
-          </Link>
-          <Link href="/signup">
-            <Button variant="primary" size="sm" className="px-2 sm:px-5">
-              Sign up
-            </Button>
-          </Link>
+          <HeaderAuthActions isLoggedIn={isLoggedIn} userName={userName} />
         </div>
       </div>
 
@@ -58,7 +54,7 @@ export function Header() {
       </div>
 
       {/* Mobile nav links */}
-      <div className="flex items-center justify-center gap-5 border-t border-border-subtle px-4 py-2 sm:hidden">
+      <div className="flex items-center justify-center gap-6 border-t border-border-subtle px-4 py-2.5 lg:hidden">
         {navLinks.map((link) => (
           <Link
             key={link.href}

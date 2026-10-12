@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/Button";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { ContentProtection } from "@/components/layout/ContentProtection";
+import { getCurrentProfile } from "@/lib/auth/getCurrentProfile";
 import type { ExamCategory, BundlePublic } from "@/types/domain";
 
 export const metadata: Metadata = {
@@ -45,12 +46,15 @@ async function getLandingData() {
 }
 
 export default async function Home() {
-  const { categories, bundles } = await getLandingData();
+  const [{ categories, bundles }, current] = await Promise.all([
+    getLandingData(),
+    getCurrentProfile("student"),
+  ]);
 
   return (
     <div className="flex min-h-screen flex-col">
       <ContentProtection />
-      <Header />
+      <Header isLoggedIn={!!current} userName={current?.profile.full_name} />
       <main className="flex-1">
         <AnimatedHero />
 

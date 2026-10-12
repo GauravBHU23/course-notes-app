@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { cookies } from "next/headers";
-import { decodeSessionCookie, APP_SESSION_COOKIE } from "@/lib/auth/cookies";
+import { getSessionPayload } from "@/lib/auth/getSessionPayload";
 import { validateSession } from "@/lib/auth/session";
 import { verifyPdfToken } from "@/lib/pdf/signToken";
 import { checkPdfAccess } from "@/lib/pdf/access";
@@ -21,8 +20,7 @@ export async function GET(req: NextRequest) {
   }
   const { payload } = verification;
 
-  const cookieStore = await cookies();
-  const cookiePayload = decodeSessionCookie(cookieStore.get(APP_SESSION_COOKIE)?.value);
+  const cookiePayload = await getSessionPayload(req);
   const sessionCheck = await validateSession(cookiePayload);
   if (!sessionCheck.valid || !cookiePayload || cookiePayload.sessionId !== payload.sid) {
     return NextResponse.json({ error: "Session no longer valid. Please log in again." }, { status: 401 });

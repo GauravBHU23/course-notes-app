@@ -4,15 +4,15 @@ import { useState } from "react";
 import { LoginForm } from "@/components/auth/LoginForm";
 import { AdminLoginForm } from "@/components/admin/AdminLoginForm";
 
-type Audience = "candidate" | "admin";
+type Audience = "Student" | "admin";
 
 export function LoginTabs() {
-  const [audience, setAudience] = useState<Audience>("candidate");
+  const [audience, setAudience] = useState<Audience>("Student");
 
   return (
     <div>
       <div className="mb-6 flex overflow-hidden rounded-xl border border-border-subtle bg-surface">
-        {(["candidate", "admin"] as Audience[]).map((tab) => (
+        {(["Student", "admin"] as Audience[]).map((tab) => (
           <button
             key={tab}
             type="button"
@@ -23,12 +23,12 @@ export function LoginTabs() {
                 : "border-transparent text-foreground/50 hover:text-foreground/70"
             }`}
           >
-            {tab === "candidate" ? "Candidate" : "Admin"}
+            {tab === "Student" ? "Student" : "Admin"}
           </button>
         ))}
       </div>
 
-      {audience === "candidate" ? <LoginForm /> : <AdminLoginForm />}
+      {audience === "Student" ? <LoginForm /> : <AdminLoginForm />}
     </div>
   );
 }

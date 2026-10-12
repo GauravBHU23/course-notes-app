@@ -1,18 +1,23 @@
 import { NextRequest, NextResponse } from "next/server";
 import { cookies } from "next/headers";
-import { decodeSessionCookie, clearSessionCookie, APP_SESSION_COOKIE, ADMIN_SESSION_COOKIE } from "@/lib/auth/cookies";
+import { clearSessionCookie } from "@/lib/auth/cookies";
+import { getSessionPayload } from "@/lib/auth/getSessionPayload";
 import { revokeSession } from "@/lib/auth/session";
 
-export async function POST(_req: NextRequest) {
+export async function POST(req: NextRequest) {
   const cookieStore = await cookies();
 
-  const studentPayload = decodeSessionCookie(cookieStore.get(APP_SESSION_COOKIE)?.value);
+  // getSessionPayload also reads the mobile x-app-session/x-admin-session
+  // header, so a mobile client's session gets revoked server-side on
+  // logout too -- cookie clearing below is still a no-op for mobile (it
+  // has no cookie jar for our cookies), which is expected and harmless.
+  const studentPayload = await getSessionPayload(req, "student");
   if (studentPayload) {
     await revokeSession(studentPayload.sessionId, "logout");
     clearSessionCookie(cookieStore, "student");
   }
 
-  const adminPayload = decodeSessionCookie(cookieStore.get(ADMIN_SESSION_COOKIE)?.value);
+  const adminPayload = await getSessionPayload(req, "admin");
   if (adminPayload) {
     await revokeSession(adminPayload.sessionId, "logout");
     clearSessionCookie(cookieStore, "admin");

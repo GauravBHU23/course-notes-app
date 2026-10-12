@@ -18,7 +18,7 @@ export default async function CheckoutPage({ params }: { params: Promise<{ bundl
 
   return (
     <div className="flex flex-col gap-6">
-      <h1 className="text-2xl font-bold">Complete your purchase</h1>
+      <h1 className="text-xl font-bold sm:text-2xl">Complete your purchase</h1>
       <CashfreeCheckout
         bundleSlug={bundleSlug}
         bundleTitle={bundle.title}

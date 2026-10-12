@@ -25,52 +25,84 @@ export default async function PurchasesPage() {
 
   return (
     <div className="flex flex-col gap-6">
-      <h1 className="text-2xl font-bold">Purchase history</h1>
+      <h1 className="text-xl font-bold sm:text-2xl">Purchase history</h1>
 
       {!purchases?.length ? (
         <Card className="p-8 text-center text-sm text-foreground/60">No purchases yet.</Card>
       ) : (
-        <Card className="overflow-hidden p-0">
-          <table className="w-full text-sm">
-            <thead className="bg-brand-50/60 text-left text-foreground/60">
-              <tr>
-                <th className="px-5 py-3 font-medium">Bundle</th>
-                <th className="px-5 py-3 font-medium">Date</th>
-                <th className="px-5 py-3 font-medium">Amount</th>
-                <th className="px-5 py-3 font-medium">Status</th>
-                <th className="px-5 py-3 font-medium">Invoice</th>
-              </tr>
-            </thead>
-            <tbody>
-              {purchases.map((p) => {
-                const bundle = p.bundles as unknown as { title: string } | null;
-                return (
-                  <tr key={p.id} className="border-t border-border-subtle">
-                    <td className="px-5 py-3">{bundle?.title ?? "—"}</td>
-                    <td className="px-5 py-3 text-foreground/60">
-                      {new Date(p.created_at).toLocaleDateString("en-IN")}
-                    </td>
-                    <td className="px-5 py-3">₹{p.amount_inr}</td>
-                    <td className="px-5 py-3">
-                      <Badge tone={statusTone[p.status as keyof typeof statusTone] ?? "neutral"}>
-                        {p.status}
-                      </Badge>
-                    </td>
-                    <td className="px-5 py-3">
-                      {p.status === "success" ? (
-                        <a href={`/api/invoices/${p.id}`} className="text-brand-600 hover:underline">
-                          Download
-                        </a>
-                      ) : (
-                        <span className="text-foreground/30">—</span>
-                      )}
-                    </td>
-                  </tr>
-                );
-              })}
-            </tbody>
-          </table>
-        </Card>
+        <>
+          {/* Mobile: stacked cards */}
+          <div className="flex flex-col gap-3 sm:hidden">
+            {purchases.map((p) => {
+              const bundle = p.bundles as unknown as { title: string } | null;
+              return (
+                <Card key={p.id} className="p-4">
+                  <div className="flex items-start justify-between gap-2">
+                    <span className="font-medium">{bundle?.title ?? "—"}</span>
+                    <Badge tone={statusTone[p.status as keyof typeof statusTone] ?? "neutral"}>
+                      {p.status}
+                    </Badge>
+                  </div>
+                  <div className="mt-2 flex items-center justify-between text-sm text-foreground/60">
+                    <span>{new Date(p.created_at).toLocaleDateString("en-IN")}</span>
+                    <span className="font-medium text-foreground">₹{p.amount_inr}</span>
+                  </div>
+                  {p.status === "success" && (
+                    <a
+                      href={`/api/invoices/${p.id}`}
+                      className="mt-3 inline-block text-sm text-brand-600 hover:underline"
+                    >
+                      Download invoice
+                    </a>
+                  )}
+                </Card>
+              );
+            })}
+          </div>
+
+          {/* Desktop: table */}
+          <Card className="hidden overflow-x-auto p-0 sm:block">
+            <table className="w-full text-sm">
+              <thead className="bg-brand-50/60 text-left text-foreground/60">
+                <tr>
+                  <th className="px-5 py-3 font-medium">Bundle</th>
+                  <th className="px-5 py-3 font-medium">Date</th>
+                  <th className="px-5 py-3 font-medium">Amount</th>
+                  <th className="px-5 py-3 font-medium">Status</th>
+                  <th className="px-5 py-3 font-medium">Invoice</th>
+                </tr>
+              </thead>
+              <tbody>
+                {purchases.map((p) => {
+                  const bundle = p.bundles as unknown as { title: string } | null;
+                  return (
+                    <tr key={p.id} className="border-t border-border-subtle">
+                      <td className="px-5 py-3">{bundle?.title ?? "—"}</td>
+                      <td className="px-5 py-3 text-foreground/60">
+                        {new Date(p.created_at).toLocaleDateString("en-IN")}
+                      </td>
+                      <td className="px-5 py-3">₹{p.amount_inr}</td>
+                      <td className="px-5 py-3">
+                        <Badge tone={statusTone[p.status as keyof typeof statusTone] ?? "neutral"}>
+                          {p.status}
+                        </Badge>
+                      </td>
+                      <td className="px-5 py-3">
+                        {p.status === "success" ? (
+                          <a href={`/api/invoices/${p.id}`} className="text-brand-600 hover:underline">
+                            Download
+                          </a>
+                        ) : (
+                          <span className="text-foreground/30">—</span>
+                        )}
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </Card>
+        </>
       )}
     </div>
   );

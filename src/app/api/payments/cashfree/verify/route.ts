@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { cookies } from "next/headers";
-import { decodeSessionCookie, APP_SESSION_COOKIE } from "@/lib/auth/cookies";
+import { getSessionPayload } from "@/lib/auth/getSessionPayload";
 import { validateSession } from "@/lib/auth/session";
 import { createAdminClient } from "@/lib/supabase/admin";
 
@@ -16,8 +15,7 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({ error: "Missing orderId." }, { status: 400 });
   }
 
-  const cookieStore = await cookies();
-  const payload = decodeSessionCookie(cookieStore.get(APP_SESSION_COOKIE)?.value);
+  const payload = await getSessionPayload(req);
   const sessionCheck = await validateSession(payload);
   if (!sessionCheck.valid || !payload) {
     return NextResponse.json({ error: "Please log in to continue." }, { status: 401 });

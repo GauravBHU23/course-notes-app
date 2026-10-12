@@ -1,16 +1,14 @@
 import { NextRequest, NextResponse } from "next/server";
-import { cookies } from "next/headers";
-import { decodeSessionCookie, APP_SESSION_COOKIE, ADMIN_SESSION_COOKIE } from "@/lib/auth/cookies";
+import { getSessionPayload } from "@/lib/auth/getSessionPayload";
 import { validateSession } from "@/lib/auth/session";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { generateInvoicePdf } from "@/lib/invoices/generate";
 
 export async function GET(req: NextRequest, { params }: { params: Promise<{ purchaseId: string }> }) {
   const { purchaseId } = await params;
-  const cookieStore = await cookies();
 
-  const studentPayload = decodeSessionCookie(cookieStore.get(APP_SESSION_COOKIE)?.value);
-  const adminPayload = decodeSessionCookie(cookieStore.get(ADMIN_SESSION_COOKIE)?.value);
+  const studentPayload = await getSessionPayload(req, "student");
+  const adminPayload = await getSessionPayload(req, "admin");
 
   const studentCheck = await validateSession(studentPayload);
   const adminCheck = adminPayload ? await validateSession(adminPayload) : null;

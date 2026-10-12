@@ -1,8 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
-import { cookies } from "next/headers";
 import { createAdminClient } from "@/lib/supabase/admin";
-import { decodeSessionCookie, APP_SESSION_COOKIE } from "@/lib/auth/cookies";
+import { getSessionPayload } from "@/lib/auth/getSessionPayload";
 import { validateSession } from "@/lib/auth/session";
 import { sendContactQueryEmail } from "@/lib/email/resend";
 import { getPublicSettings } from "@/lib/settings/getPublicSettings";
@@ -32,8 +31,7 @@ export async function POST(req: NextRequest) {
 
   // Attach the logged-in user's id if they have a valid session, purely for
   // admin-side context -- the form works for anonymous visitors too.
-  const cookieStore = await cookies();
-  const payload = decodeSessionCookie(cookieStore.get(APP_SESSION_COOKIE)?.value);
+  const payload = await getSessionPayload(req);
   const sessionCheck = await validateSession(payload);
   const userId = sessionCheck.valid && payload ? payload.userId : null;
 

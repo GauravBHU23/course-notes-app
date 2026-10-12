@@ -4,7 +4,7 @@ import { createClient as createServerSupabaseClient } from "@/lib/supabase/serve
 import { resolveIdentifierToProfile } from "@/lib/auth/resolveIdentifier";
 import { checkAndClearLockout, recordFailedAttempt, resetFailedAttempts, logLoginAttempt, LOCKOUT_MAX_ATTEMPTS } from "@/lib/auth/lockout";
 import { createSession } from "@/lib/auth/session";
-import { setSessionCookie } from "@/lib/auth/cookies";
+import { setSessionCookie, encodeSessionCookie } from "@/lib/auth/cookies";
 import { getClientIp } from "@/lib/utils/request";
 import { rateLimit } from "@/lib/utils/rateLimiter";
 import { passwordLoginSchema } from "@/lib/utils/validators";
@@ -78,5 +78,8 @@ export async function POST(req: NextRequest) {
   const cookieStore = await cookies();
   setSessionCookie(cookieStore, profile.role === "admin" ? "admin" : "student", cookiePayload);
 
-  return NextResponse.json({ ok: true, role: profile.role });
+  // Web ignores this; the mobile app has no cookie jar for our own cookies
+  // (see getSessionPayload.ts) and stores this instead, sending it back via
+  // the x-app-session/x-admin-session header on every subsequent request.
+  return NextResponse.json({ ok: true, role: profile.role, sessionToken: encodeSessionCookie(cookiePayload) });
 }

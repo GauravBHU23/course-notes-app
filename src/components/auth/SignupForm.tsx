@@ -1,14 +1,17 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { toast } from "sonner";
 import { Card } from "@/components/ui/Card";
 import { Input } from "@/components/ui/Input";
 import { Button } from "@/components/ui/Button";
+import { GoogleSignInButton } from "@/components/auth/GoogleSignInButton";
 
 export function SignupForm() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const redirect = searchParams.get("redirect");
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
   const [mobile, setMobile] = useState("");
@@ -34,7 +37,10 @@ export function SignupForm() {
         return;
       }
       toast.success("Account created successfully!");
-      router.push("/login?signup=success");
+      const loginUrl = redirect
+        ? `/login?signup=success&redirect=${encodeURIComponent(redirect)}`
+        : "/login?signup=success";
+      router.push(loginUrl);
     } finally {
       setLoading(false);
     }
@@ -44,6 +50,14 @@ export function SignupForm() {
     <Card className="p-8">
       <h1 className="mb-1 text-xl font-bold">Create your account</h1>
       <p className="mb-6 text-sm text-foreground/60">Get instant access to purchased notes and PDFs.</p>
+
+      <GoogleSignInButton />
+
+      <div className="my-5 flex items-center gap-3 text-xs text-foreground/40">
+        <div className="h-px flex-1 bg-border-subtle" />
+        or sign up with email
+        <div className="h-px flex-1 bg-border-subtle" />
+      </div>
 
       <form onSubmit={handleSubmit} className="flex flex-col gap-4">
         <Input label="Full name" value={fullName} onChange={(e) => setFullName(e.target.value)} required />
@@ -70,7 +84,10 @@ export function SignupForm() {
 
       <p className="mt-6 text-center text-sm text-foreground/60">
         Already have an account?{" "}
-        <a href="/login" className="font-medium text-brand-600 hover:underline">
+        <a
+          href={redirect ? `/login?redirect=${encodeURIComponent(redirect)}` : "/login"}
+          className="font-medium text-brand-600 hover:underline"
+        >
           Log in
         </a>
       </p>

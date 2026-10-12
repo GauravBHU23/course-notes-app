@@ -5,7 +5,7 @@ import { resolveIdentifierToProfile } from "@/lib/auth/resolveIdentifier";
 import { checkAndClearLockout, resetFailedAttempts, logLoginAttempt } from "@/lib/auth/lockout";
 import { verifyOtp } from "@/lib/auth/otp";
 import { createSession } from "@/lib/auth/session";
-import { setSessionCookie } from "@/lib/auth/cookies";
+import { setSessionCookie, encodeSessionCookie } from "@/lib/auth/cookies";
 import { establishSupabaseSession } from "@/lib/auth/establishSupabaseSession";
 import { getClientIp } from "@/lib/utils/request";
 import { rateLimit } from "@/lib/utils/rateLimiter";
@@ -72,5 +72,5 @@ export async function POST(req: NextRequest) {
   const cookieStore = await cookies();
   setSessionCookie(cookieStore, profile.role === "admin" ? "admin" : "student", cookiePayload);
 
-  return NextResponse.json({ ok: true, role: profile.role });
+  return NextResponse.json({ ok: true, role: profile.role, sessionToken: encodeSessionCookie(cookiePayload) });
 }

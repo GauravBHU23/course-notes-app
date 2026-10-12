@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { createAdminClient } from "@/lib/supabase/admin";
+import { getCurrentProfile } from "@/lib/auth/getCurrentProfile";
 import { Card } from "@/components/ui/Card";
 import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
@@ -73,9 +74,11 @@ export default async function BundlePage({ params }: BundlePageProps) {
   }
 
   const pdfs = await getPdfsForBundle(bundle.id);
-  const checkoutHref = `/login?redirect=${encodeURIComponent(
-    `/dashboard/checkout/${bundle.slug}`
-  )}`;
+  const checkoutPath = `/dashboard/checkout/${bundle.slug}`;
+  const currentUser = await getCurrentProfile("student");
+  const checkoutHref = currentUser
+    ? checkoutPath
+    : `/login?redirect=${encodeURIComponent(checkoutPath)}`;
 
   return (
     <div className="mx-auto max-w-4xl px-4 py-16 sm:px-6">
@@ -133,9 +136,11 @@ export default async function BundlePage({ params }: BundlePageProps) {
               </Button>
             </Link>
 
-            <p className="mt-3 text-center text-xs text-foreground/50">
-              Login or create a free account to purchase.
-            </p>
+            {!currentUser && (
+              <p className="mt-3 text-center text-xs text-foreground/50">
+                Login or create a free account to purchase.
+              </p>
+            )}
           </Card>
         </div>
       </div>

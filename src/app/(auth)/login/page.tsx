@@ -19,6 +19,11 @@ export default async function LoginPage({
           You were signed out because your account was logged in elsewhere.
         </div>
       )}
+      {reason === "oauth_failed" && (
+        <div className="mb-4 rounded-xl bg-tone-danger-bg p-3 text-center text-sm text-tone-danger-text">
+          Google sign-in didn&apos;t complete. Please try again.
+        </div>
+      )}
       <LoginTabs />
     </Suspense>
   );

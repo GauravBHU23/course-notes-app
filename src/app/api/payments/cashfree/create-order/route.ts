@@ -1,18 +1,19 @@
 import { NextRequest, NextResponse } from "next/server";
-import { cookies } from "next/headers";
 import { randomUUID } from "crypto";
-import { decodeSessionCookie, APP_SESSION_COOKIE } from "@/lib/auth/cookies";
+import { getSessionPayload } from "@/lib/auth/getSessionPayload";
 import { validateSession } from "@/lib/auth/session";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { createCashfreeOrder } from "@/lib/cashfree/client";
 import { rateLimit } from "@/lib/utils/rateLimiter";
 import { z } from "zod";
 
-const bodySchema = z.object({ bundleSlug: z.string().trim().min(1) });
+const bodySchema = z.object({
+  bundleSlug: z.string().trim().min(1),
+  platform: z.enum(["web", "mobile"]).optional().default("web"),
+});
 
 export async function POST(req: NextRequest) {
-  const cookieStore = await cookies();
-  const payload = decodeSessionCookie(cookieStore.get(APP_SESSION_COOKIE)?.value);
+  const payload = await getSessionPayload(req);
   const sessionCheck = await validateSession(payload);
   if (!sessionCheck.valid || !payload) {
     return NextResponse.json({ error: "Please log in to continue." }, { status: 401 });

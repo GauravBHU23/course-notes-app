@@ -34,3 +34,13 @@ export const otpVerifySchema = z.object({
   code: z.string().regex(/^\d{6}$/),
   purpose: z.enum(["login", "signup", "password_reset"]),
 });
+
+export const updateProfileSchema = z.object({
+  fullName: z.string().trim().min(2).max(100),
+  mobile: mobileSchema.optional().or(z.literal("")),
+});
+
+export const changePasswordSchema = z.object({
+  currentPassword: z.string().min(1),
+  newPassword: z.string().min(8).max(72),
+});

@@ -5,10 +5,16 @@ import { toast } from "sonner";
 import { Input } from "@/components/ui/Input";
 import { Button } from "@/components/ui/Button";
 
-export function ContactForm() {
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [subject, setSubject] = useState("");
+interface ContactFormProps {
+  defaultName?: string;
+  defaultEmail?: string;
+  defaultSubject?: string;
+}
+
+export function ContactForm({ defaultName = "", defaultEmail = "", defaultSubject = "" }: ContactFormProps) {
+  const [name, setName] = useState(defaultName);
+  const [email, setEmail] = useState(defaultEmail);
+  const [subject, setSubject] = useState(defaultSubject);
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -33,9 +39,9 @@ export function ContactForm() {
       }
       setSubmitted(true);
       toast.success("Your query has been sent! We'll get back to you soon.");
-      setName("");
-      setEmail("");
-      setSubject("");
+      setName(defaultName);
+      setEmail(defaultEmail);
+      setSubject(defaultSubject);
       setMessage("");
     } finally {
       setLoading(false);

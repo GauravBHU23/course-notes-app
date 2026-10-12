@@ -1,13 +1,14 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { toast } from "sonner";
 import { Card } from "@/components/ui/Card";
 import { Input } from "@/components/ui/Input";
 import { Button } from "@/components/ui/Button";
 import { OtpInput } from "@/components/auth/OtpInput";
+import { GoogleSignInButton } from "@/components/auth/GoogleSignInButton";
 import { useCountdown } from "@/hooks/useCountdown";
 
 type Method = "password" | "otp";
@@ -20,8 +21,15 @@ function isMobile(value: string) {
   return /^[6-9]\d{9}$/.test(value.trim());
 }
 
+function safeRedirect(value: string | null): string | null {
+  if (!value || !value.startsWith("/") || value.startsWith("//")) return null;
+  return value;
+}
+
 export function LoginForm() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const redirectTo = safeRedirect(searchParams.get("redirect"));
   const [method, setMethod] = useState<Method>("password");
   const [identifier, setIdentifier] = useState("");
   const [password, setPassword] = useState("");
@@ -56,7 +64,7 @@ export function LoginForm() {
         return;
       }
       toast.success("Logged in successfully!");
-      router.push(data.role === "admin" ? "/admin" : "/dashboard");
+      router.push(data.role === "admin" ? "/admin" : redirectTo ?? "/dashboard");
     } finally {
       setLoading(false);
     }
@@ -105,7 +113,7 @@ export function LoginForm() {
         return;
       }
       toast.success("Logged in successfully!");
-      router.push(data.role === "admin" ? "/admin" : "/dashboard");
+      router.push(data.role === "admin" ? "/admin" : redirectTo ?? "/dashboard");
     } finally {
       setLoading(false);
     }
@@ -130,6 +138,14 @@ export function LoginForm() {
     <Card className="p-8">
       <h1 className="mb-1 text-xl font-bold">Welcome back</h1>
       <p className="mb-6 text-sm text-foreground/60">Log in to access your purchased content.</p>
+
+      <GoogleSignInButton />
+
+      <div className="my-5 flex items-center gap-3 text-xs text-foreground/40">
+        <div className="h-px flex-1 bg-border-subtle" />
+        or log in with email/mobile
+        <div className="h-px flex-1 bg-border-subtle" />
+      </div>
 
       <div className="mb-6 flex rounded-xl bg-brand-50 p-1">
         {(["password", "otp"] as Method[]).map((m) => (
@@ -229,7 +245,10 @@ export function LoginForm() {
 
       <p className="mt-6 text-center text-sm text-foreground/60">
         Don&apos;t have an account?{" "}
-        <a href="/signup" className="font-medium text-brand-600 hover:underline">
+        <a
+          href={redirectTo ? `/signup?redirect=${encodeURIComponent(redirectTo)}` : "/signup"}
+          className="font-medium text-brand-600 hover:underline"
+        >
           Sign up
         </a>
       </p>
